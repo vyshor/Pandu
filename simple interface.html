@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="apifuncs.js"></script>
+        <script src="backend calculation.js"></script>
+        <title>Title</title>
+    </head>
+    <body>
+        <form>
+            University:
+            <select name="Uni" id="uni">
+                <option value="NUS">NUS</option>
+                <option value="NTU">NTU</option>
+                <option value="SMU">SMU</option>
+            </select>
+            <br>
+            Course:
+            <select name="Course" id="course"></select>
+            <br>
+            <input type="checkbox" name="hostel" id="hostel" /> Staying in Hostel?
+            <label for="hostel"></label>
+            <br>
+            <div id="hostel_fees"></div>
+            <br>
+            Estimated Monthly Expense: <div id="expense"></div>
+            <input name="calculate" type="button" value="Calculate" onclick="estimated_monthly_expenditure()">
+
+        </form>
+    </body>
+</html>
