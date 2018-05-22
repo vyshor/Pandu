@@ -15,4 +15,4 @@ doubledegree = doubledegree[1:]
 
 programs += doubledegree
 json.dump(programs, codecs.open('NTU_courses.json', 'w', encoding='utf-8'), sort_keys=True, indent=4)
-    
+
