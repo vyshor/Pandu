@@ -7,10 +7,18 @@ if (!LOCALISED) {
     GITRAW = "";
 }
 
-var SQL = require('sql.js');
-var fs = require('fs');
-var filebuffer = fs.readFileSync(GITRAW + 'Python/course_info.sqlite');
-var db = new SQL.Database(filebuffer);
+// var SQL = require('sql.js');
+// var fs = require('browserify-fs');
+// var path = require('path');
+// var db;
+// const http = require("http");
+// fs.readFile(GITRAW + path.join(__dirname, 'Python/course_info.db'), function(err, data){
+//     console.log(err);
+//     console.log(typeof data);
+//     db = new SQL.Database(data);
+//     console.log(db);
+//     console.log(db.exec("SELECT * FROM courseInfo"));
+// });
 
 window.onload = function () {
 
@@ -20,7 +28,7 @@ window.onload = function () {
         var uni = this.value;
         if (uni === "") return; // please select - possibly you want something else here
 
-        jQuery.ajax(GITRAW + "Python/" + uni + "_courses.json", {
+        jQuery.ajax(GITRAW + "Python/uni/" + uni + "_courses.json", {
             async: true, success: function (fees) {
                 jQuery('#course')
                     .find('option')
@@ -41,17 +49,19 @@ window.onload = function () {
         document.getElementById('course').style.visibility = 'visible';
     }
 
-    // Change the course fees when course is changed
-    document.getElementById("course").onchange = function () {
-        var course = this.value;
-        var uni = document.getElementById("uni");
-        if (course === "") return; // please select - possibly you want something else here
+    house_price_on_load();
 
-        var output = db.prepare("SELECT cost FROM courseInfo WHERE uni=:aval AND course=:bval");
-        var result = stmt.getAsObject({':aval' : uni, ':bval' : course});
-        console.log(result);
-        document.getElementById("course_fees").innerHTML = result;
-    }
+    // // Change the course fees when course is changed
+    // document.getElementById("course").onchange = function () {
+    //     var course = this.value;
+    //     var uni = document.getElementById("uni");
+    //     if (course === "") return; // please select - possibly you want something else here
+    //
+    //     var output = db.prepare("SELECT cost FROM courseInfo WHERE uni=:aval AND course=:bval");
+    //     var result = stmt.getAsObject({':aval' : uni, ':bval' : course});
+    //     console.log(result);
+    //     document.getElementById("course_fees").innerHTML = result;
+    // }
 }
 
 function calculate_expenditure_with_hostel(monthly_expense) {
@@ -66,7 +76,7 @@ function calculate_expenditure_with_hostel(monthly_expense) {
             monthly_expense -= individual_expense[4]["IndividualExpense"] * 0.5; // minus transport expense by half
             monthly_expense -= individual_expense[8]["IndividualExpense"]; // minus accomodation expenses
 
-            jQuery.ajax(GITRAW + "Python/" + document.getElementById("uni").value + "_hostel.json", {
+            jQuery.ajax(GITRAW + "Python/uni/" + document.getElementById("uni").value + "_hostel.json", {
                 async: false, success: function (fees) {
                     monthly_expense += fees[0];
                     hostel_fees = fees[0]

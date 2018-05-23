@@ -2,11 +2,8 @@
 
 function total_monthly_expenses(monthly_income) {
     var data = JSON.stringify(false);
-    var return_data;
 
     var xhr = new XMLHttpRequest();
-    // xhr.withCredentials = true;
-    // xhr.timeout = 4000;
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
@@ -17,8 +14,8 @@ function total_monthly_expenses(monthly_income) {
     xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + monthly_income, false);
 
     xhr.send(data);
-    return return_data;
 }
+
 
 
 function individual_item_expense(monthly_expense) {
