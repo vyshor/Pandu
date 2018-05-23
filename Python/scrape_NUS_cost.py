@@ -2,9 +2,11 @@ from tabula import convert_into
 import pandas as pd
 import os
 import re
+import sqlite3
 
 URL = 'http://www.nus.edu.sg/registrar/info/ug/UGTuitionCurrent.pdf'
 convert_into(URL, 'temp.csv', pages='all')
+# exit() # there seems to be a bug that the csv is only generated when the process finished.
 df = pd.read_csv("temp.csv", header=None, names=range(5))
 table_names = ['Per annum amounts', 'Per module amounts']
 groups = df[1].isin(table_names).cumsum()
@@ -52,6 +54,25 @@ for key, value in lstofcourses.items():
     if value == 0:
         lstofcourses[key] = fees[2]  # Computing is second
 
+conn = sqlite3.connect('course_info.sqlite')
+c = conn.cursor()
+
+
+def create_table():
+    c.execute('CREATE TABLE IF NOT EXISTS courseInfo (uni TEXT, course TEXT, cost REAL)')
+
+
+def data_entry(uni, course, cost):
+    c.execute('INSERT INTO courseInfo VALUES(\"{}\", \"{}\", \"{}\")'.format(uni, course, cost))
+    conn.commit()
+
+
+
+create_table()
+for course, cost in lstofcourses.items():
+    data_entry('NUS', course, cost)
+c.close()
+conn.close()
 
 print(lstofcourses)
 print(df)
