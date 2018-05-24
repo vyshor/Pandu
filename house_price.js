@@ -85,17 +85,61 @@ function house_price_on_load() {
     }
 }
 
-function get_house_price() {
-    var data = {'country':'singapore', 'regionInput':null, 'cityInput':null, 'locationInput':'Ang Mo Kio', 'districtInput':'20', 'houseTypeInput':'HDB', 'roomTypeInput':'Executive'};
+function prepare_api_inputs_house_monthly(house_price, months_to_go, downpayment_pct) {
+    return "house_price=" + house_price + "&months_to_go="+ months_to_go+ "&downpayment_pct=" + downpayment_pct;
+}
+
+function prepare_api_inputs_house_price() {
+    var location = jQuery('#location').val();
+    var housing = jQuery('#housing').val().split(" ");
+    // Process the housing picked
+    if (housing[0] !== 'Executive') {
+        housing[0] = housing[0][0].toLowerCase() + housing[0].substr(1);
+    }
+    if (housing[1] !== 'HDB') {
+        housing[1] = housing[1][0].toLowerCase() + housing[1].substr(1);
+    }
+    // Process the location picked
+    location = location.replace(/ /g, "%20");
+
+    return "country=Singapore&locationInput=" + location + "&houseTypeInput=" + housing[1] + "&roomTypeInput=" + housing[0];
+}
+
+function get_house_monthly(house_price) {
+    var data = JSON.stringify(false);
 
     var xhr = new XMLHttpRequest();
     // xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
-            console.log(this.responseText);
+            var monthly_payment = this.responseText;
+            monthly_payment = JSON.parse(monthly_payment);
+            monthly_payment = monthly_payment['MinMonthlyPayment'];
+            jQuery('#house_monthly').html("Monthly Repayment: " + parseFloat(monthly_payment).toFixed(2));
         }
     });
-    xhr.open("POST", "http://microservice.dev.bambu.life/api/generalCalculator/houseCostCalculatorV2s/getHousePrice");
+
+    xhr.open("GET", "http://dev.bambu.life:8081/api/MortgageCalculator?" + prepare_api_inputs_house_monthly(house_price,60,0.2));
+
     xhr.send(data);
 }
+
+function get_house_price() {
+    var data = JSON.stringify(false);
+    var xhr = new XMLHttpRequest();
+    // xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === this.DONE) {
+            var house_price = JSON.parse(this.responseText);
+            house_price = parseFloat(house_price['housePrice'][0]['price']).toFixed(2);
+            get_house_monthly(house_price);
+        }
+    });
+
+    xhr.open("GET", "http://microservice.dev.bambu.life/api/generalCalculator/houseCostCalculatorV2s/getHousePrice?" + prepare_api_inputs_house_price());
+
+    xhr.send(data);
+}
+

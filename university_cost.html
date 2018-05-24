@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!--<script src="bundle.js"></script>-->
+        <script src="LOCALISED.js"></script>
+        <script src="university_cost.js"></script>
+        <script> window.onload = function () {university_cost_on_load();}</script>
+
+        <title>Title</title>
+    </head>
+    <body>
+        <form>
+            University:
+            <select name="Uni" id="uni">
+                <option value="NUS">NUS</option>
+                <option value="NTU">NTU</option>
+                <option value="SMU">SMU</option>
+            </select>
+            <br>
+            Course:
+            <select name="Course" id="course"></select>
+            <br>
+            Annual Course Fees: <div id="course_fees"></div>
+            <br>
+            Course Duration: <div id="course_duration"></div>
+            <br>
+            Median Salary: <div id="median_salary"></div>
+            <input name="calculate" type="button" value="Calculate" onclick="get_course_cost_salary()">
+
+        </form>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="LOCALISED.js"></script>
+        <script src="house_price.js"></script>
+        <script> window.onload = function () {house_price_on_load();}</script>
+    </head>
+    <body>
+        <form>
+            Location:
+            <select name="Location" id="location"></select>
+            Housing Types:
+            <select name="Housing" id="housing"></select>
+            <br>
+            <div id="house_monthly"></div>
+            <br>
+            <input name="House Price" type="button" value="house_price" onclick="get_house_price()">
+        </form>
+    </body>
+</html>

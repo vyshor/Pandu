@@ -1,0 +1,252 @@
+{
+    "Accountancy": {
+        "cost": "9400",
+        "duration": "3",
+        "median_salary": "3000"
+    },
+    "Accountancy and Business": {
+        "cost": "9400",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Aerospace Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3500"
+    },
+    "Art, Design and Media": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Arts (Education)": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Bioengineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3419"
+    },
+    "Biological Sciences": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3200"
+    },
+    "Biological Sciences and Psychology": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Biomedical Sciences and Chinese Medicine": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "2950"
+    },
+    "Business": {
+        "cost": "9400",
+        "duration": "3",
+        "median_salary": "3300"
+    },
+    "Business and Computer Engineering": {
+        "cost": "9400",
+        "duration": "4",
+        "median_salary": "5000"
+    },
+    "Business and Computing": {
+        "cost": "9400",
+        "duration": "4",
+        "median_salary": "5000"
+    },
+    "Chemical and Biomolecular Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3500"
+    },
+    "Chemistry and Biological Chemistry": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3100"
+    },
+    "Chinese": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Civil Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3400"
+    },
+    "Communication Studies": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Computer Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Computer Science": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3850"
+    },
+    "Data Science and Artificial Intelligence": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Economics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3400"
+    },
+    "Economics and Media Analytics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "N.A"
+    },
+    "Economics and Psychology": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Economics and Public Policy and Global Affairs": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Electrical and Electronic Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Engineering and Economics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "N.A"
+    },
+    "English": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "English Literature and Art History": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Environmental Earth Systems Science": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3635"
+    },
+    "Environmental Earth Systems Science and Public Policy and Global Affairs": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Environmental Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3635"
+    },
+    "History": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3200"
+    },
+    "Information Engineering and Media": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3700"
+    },
+    "Linguistics and Multilingual Studies": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3100"
+    },
+    "Maritime Studies": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3320"
+    },
+    "Materials Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3375"
+    },
+    "Mathematical Sciences": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3500"
+    },
+    "Mathematical Sciences and Economics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Mathematics and Economics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3400"
+    },
+    "Mechanical Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3450"
+    },
+    "Medicine": {
+        "cost": "34200",
+        "duration": "4",
+        "median_salary": "2950"
+    },
+    "Philosophy": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "N.A"
+    },
+    "Physics and Applied Physics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Psychology": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3200"
+    },
+    "Psychology and Linguistics and Multilingual Studies": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Psychology and Media Analytics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3397.5142857142855
+    },
+    "Public Policy and Global Affairs": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3395"
+    },
+    "Science (Education)": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3701"
+    },
+    "Sociology": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3228"
+    },
+    "Sport Science and Management": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3450"
+    }
+}

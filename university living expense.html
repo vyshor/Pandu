@@ -4,8 +4,10 @@
         <meta charset="UTF-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!--<script src="bundle.js"></script>-->
-        <script src="backend calculation.js"></script>
-        <script src="house_price.js"></script>
+        <script src="LOCALISED.js"></script>
+        <script src="university_living_expense.js"></script>
+        <script> window.onload = function () {university_living_on_load();}</script>
+
         <title>Title</title>
     </head>
     <body>
@@ -29,15 +31,6 @@
         <br>
         Course Fees: <div id="course_fees"></div>
         <input name="calculate" type="button" value="Calculate" onclick="estimated_monthly_expenditure()">
-        <br>
-        <br>
-        Location:
-        <select name="Location" id="location"></select>
-        Housing Types:
-        <select name="Housing" id="housing"></select>
-        <br>
-        <input name="House Price" type="button" value="house_price" onclick="get_house_price()">
-
 
         </form>
     </body>

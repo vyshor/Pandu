@@ -1,11 +1,3 @@
-const LOCALISED = 0; // set to 1 if using local server
-var GITRAW;
-if (!LOCALISED) {
-    GITRAW = "https://raw.githubusercontent.com/vyshor/university_expense/master/";
-} else {
-    $.noConflict();
-    GITRAW = "";
-}
 
 // var SQL = require('sql.js');
 // var fs = require('browserify-fs');
@@ -20,7 +12,7 @@ if (!LOCALISED) {
 //     console.log(db.exec("SELECT * FROM courseInfo"));
 // });
 
-window.onload = function () {
+function university_living_on_load() {
 
     // Change the course available when university is picked
     document.getElementById('course').style.visibility = 'hidden';
@@ -49,7 +41,6 @@ window.onload = function () {
         document.getElementById('course').style.visibility = 'visible';
     }
 
-    house_price_on_load();
 
     // // Change the course fees when course is changed
     // document.getElementById("course").onchange = function () {

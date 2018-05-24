@@ -1,0 +1,32 @@
+{
+    "Accountancy": {
+        "cost": "11450",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Business Management": {
+        "cost": "11450",
+        "duration": "4",
+        "median_salary": "3500"
+    },
+    "Law": {
+        "cost": "12650",
+        "duration": "4",
+        "median_salary": "5000"
+    },
+    "Science (Economics)": {
+        "cost": "11450",
+        "duration": "4",
+        "median_salary": "3700"
+    },
+    "Science (Information Systems)": {
+        "cost": "11450",
+        "duration": "4",
+        "median_salary": "4000"
+    },
+    "Social Science": {
+        "cost": "11450",
+        "duration": "4",
+        "median_salary": "3300"
+    }
+}

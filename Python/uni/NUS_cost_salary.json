@@ -1,0 +1,162 @@
+{
+    "Architecture": {
+        "cost": "8850",
+        "duration": "4",
+        "median_salary": "4000"
+    },
+    "Arts and Social Sciences": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Biomedical Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Business Administration": {
+        "cost": "9600",
+        "duration": "4",
+        "median_salary": "3025"
+    },
+    "Business Analytics": {
+        "cost": "9600",
+        "duration": "4",
+        "median_salary": "4000"
+    },
+    "Chemical Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Civil Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Computer Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "4285"
+    },
+    "Computer Science courses": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "4285"
+    },
+    "Data Science and Analytics": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "4000"
+    },
+    "Dentistry": {
+        "cost": "28400",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Electrical Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3900"
+    },
+    "Engineering Science": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "4050"
+    },
+    "Environmental Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3350"
+    },
+    "Environmental Studies": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Food Science and Technology": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": 3537.2432432432433
+    },
+    "Industrial & Systems Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3875"
+    },
+    "Industrial Design": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "2920"
+    },
+    "Information Security": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "N.A"
+    },
+    "Information Systems": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "N.A"
+    },
+    "Law": {
+        "cost": "12650",
+        "duration": "4",
+        "median_salary": "5000"
+    },
+    "Materials Science & Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3388"
+    },
+    "Mechanical Engineering": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3450"
+    },
+    "Medicine": {
+        "cost": "28400",
+        "duration": "5",
+        "median_salary": "5000"
+    },
+    "Music": {
+        "cost": "13450",
+        "duration": "4",
+        "median_salary": "2225"
+    },
+    "Nursing": {
+        "cost": "8950",
+        "duration": "4",
+        "median_salary": "3400"
+    },
+    "Pharmaceutical Science": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3300"
+    },
+    "Pharmacy": {
+        "cost": "9050",
+        "duration": "4",
+        "median_salary": "3600"
+    },
+    "Project & Facilities Management": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Real Estate": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3000"
+    },
+    "Science": {
+        "cost": "8200",
+        "duration": "4",
+        "median_salary": "3400"
+    }
+}
