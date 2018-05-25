@@ -1,6 +1,6 @@
 function university_cost_on_load() {
     // Change the course available when university is picked
-    //document.getElementById('course').style.visibility = 'hidden';
+    document.getElementById('course').style.visibility = 'hidden';
     document.getElementById("uni").onchange = function () {
         var uni = this.value;
         if (uni === "") return; // please select - possibly you want something else here
