@@ -2,21 +2,24 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <!--Deployed these when localised-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <!--<script src="LOCALISED.js"></script>-->
-        <!--<script src="university_cost.js"></script>-->
-        <!--<script src="university_living_expense.js"></script>-->
-        <!--<link rel="stylesheet" href="university_cost.css">-->
+        <script src="LOCALISED.js"></script>
+        <script src="university_cost.js"></script>
+        <script src="university_living_expense.js"></script>
+        <link rel="stylesheet" href="university_cost.css">
         <!--End of localised deployment-->
         <!--<script src="bundle.js"></script>-->
         <!---->
         <!--Deployed these when using online-->
-        <script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>
-        <script src="https://rawgit.com/vyshor/university_expense/master/university_cost.js"></script>
-        <script src="https://rawgit.com/vyshor/university_expense/master/university_living_expense.js"></script>
-        <link rel="stylesheet" href="https://rawgit.com/vyshor/university_expense/master/university_cost.css">
+        <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_cost.js"></script>-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_living_expense.js"></script>-->
+        <!--<link rel="stylesheet" href="https://rawgit.com/vyshor/university_expense/master/university_cost.css">-->
         <!--End of online deployment-->
         <script> window.onload = function () {
             university_cost_on_load();
@@ -47,6 +50,12 @@
                         <br>
                         <input type="checkbox" name="Study_loan" id="study_loan"/> Taking Study Loan?
                         <br>
+                        <div id="payback_period_wrapper" class="invisible">
+                            Payback Period: <input type="text" id="payback_period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                            <br>
+                            <div id="slider-range-payback_period"></div>
+                        </div>
+
 
 
                     </form>
@@ -79,7 +88,7 @@
                     </div>
 
                     <div id="interest_rate_wrapper" class="invisible">
-                        Interest Rate:
+                        Best Interest Rate:
                         <div id="interest_rate"></div>
                         <br>
                     </div>

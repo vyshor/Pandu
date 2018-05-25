@@ -17,7 +17,7 @@
     "Art, Design and Media": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Arts (Education)": {
         "cost": "8200",
@@ -37,7 +37,7 @@
     "Biological Sciences and Psychology": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Biomedical Sciences and Chinese Medicine": {
         "cost": "8200",
@@ -97,7 +97,7 @@
     "Data Science and Artificial Intelligence": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Economics": {
         "cost": "8200",
@@ -107,17 +107,17 @@
     "Economics and Media Analytics": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": "N.A"
+        "median_salary": 3400.0
     },
     "Economics and Psychology": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Economics and Public Policy and Global Affairs": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Electrical and Electronic Engineering": {
         "cost": "8200",
@@ -127,7 +127,7 @@
     "Engineering and Economics": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": "N.A"
+        "median_salary": 3400.0
     },
     "English": {
         "cost": "8200",
@@ -147,7 +147,7 @@
     "Environmental Earth Systems Science and Public Policy and Global Affairs": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Environmental Engineering": {
         "cost": "8200",
@@ -187,7 +187,7 @@
     "Mathematical Sciences and Economics": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Mathematics and Economics": {
         "cost": "8200",
@@ -207,7 +207,7 @@
     "Philosophy": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": "N.A"
+        "median_salary": 3400.0
     },
     "Physics and Applied Physics": {
         "cost": "8200",
@@ -222,12 +222,12 @@
     "Psychology and Linguistics and Multilingual Studies": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Psychology and Media Analytics": {
         "cost": "8200",
         "duration": "4",
-        "median_salary": 3397.5142857142855
+        "median_salary": 3400.0
     },
     "Public Policy and Global Affairs": {
         "cost": "8200",

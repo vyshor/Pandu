@@ -131,9 +131,9 @@ for key, _ in lstofcourses.items():
         if key.lower().split('and')[0].split()[0] in keyB.replace(' ', '').lower() and key.lower().split('and')[-1].split()[0] in keyB.replace(' ', '').lower() and 'median_salary' not in lstofcourses[key].keys():
             lstofcourses[key]['median_salary'] = mydict[keyB]
 
-median_mean = stats.mean([float(x.replace('$', '').replace(',','').split()[0]) for x in median_income if 'N.A' not in x])
+median_mean = round(stats.mean([float(x.replace('$', '').replace(',','').split()[0]) for x in median_income if 'N.A' not in x]),-2)
 for key, _ in lstofcourses.items():
-    if 'median_salary' not in lstofcourses[key].keys():
+    if 'median_salary' not in lstofcourses[key].keys() or lstofcourses[key]['median_salary'] == 'N.A':
         lstofcourses[key]['median_salary'] = median_mean
 
 
