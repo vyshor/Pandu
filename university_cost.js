@@ -27,15 +27,15 @@ function university_cost_on_load() {
         document.getElementById('course').style.visibility = 'visible';
     }
 
-    $("#course").change(function () {
+    jQuery("#course").change(function () {
         get_course_cost_salary();
     })
 
-    $("#study_loan").change(function () {
+    jQuery("#study_loan").change(function () {
         get_course_cost_salary();
     })
 
-    $("#hostel").change(function () {
+    jQuery("#hostel").change(function () {
         get_course_cost_salary();
     })
 
