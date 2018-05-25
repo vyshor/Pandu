@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!--Deployed these when localised-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="LOCALISED.js"></script>
+        <script src="investing_portfolio.js"></script>
+        <!--End of localised deployment-->
+        <!--<script src="bundle.js"></script>-->
+        <!---->
+        <!--Deployed thes   e when using online-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_cost.js"></script>-->
+        <!--End of online deployment-->
+
+        <script></script>
+
+        <title>Title</title>
+    </head>
+    <body>
+        <form>
+            Annual Investment:
+            <input name="Annual Investment" type="text" id="annual_invest" value="1000">
+            <div id="slider-range-risk"></div>
+
+            <div id="slider-range-period"></div>
+            <input name="Graph" type="button" value="Graph" onclick="testing()">
+            <div id="chart_div" style="width: 900px; height: 500px"></div>
+        </form>
+    </body>
+</html>

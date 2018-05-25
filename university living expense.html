@@ -2,10 +2,18 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <!--Deployed these when localised-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!--<script src="bundle.js"></script>-->
         <script src="LOCALISED.js"></script>
         <script src="university_living_expense.js"></script>
+        <!--End of localised deployment-->
+        <!--<script src="bundle.js"></script>-->
+        <!---->
+        <!--Deployed these when using online-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>-->
+        <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_living_expense.js"></script>-->
+        <!--End of online deployment-->
+
         <script> window.onload = function () {university_living_on_load();}</script>
 
         <title>Title</title>
@@ -29,7 +37,6 @@
         <br>
         Estimated Monthly Expense: <div id="expense"></div>
         <br>
-        Course Fees: <div id="course_fees"></div>
         <input name="calculate" type="button" value="Calculate" onclick="estimated_monthly_expenditure()">
 
         </form>

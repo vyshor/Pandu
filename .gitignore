@@ -2,3 +2,5 @@
 node_modules
 package-lock.json
 Python/.idea
+test.html
+test.js
