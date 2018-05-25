@@ -1,8 +1,6 @@
 function university_cost_on_load() {
-
     // Change the course available when university is picked
-    document.getElementById('course').style.visibility = 'hidden';
-    document.getElementById("uni").onchange = function () {
+    function load_course() {
         var uni = this.value;
         if (uni === "") return; // please select - possibly you want something else here
 
@@ -23,9 +21,36 @@ function university_cost_on_load() {
                 });
             }
         });
-
-        document.getElementById('course').style.visibility = 'visible';
+        //document.getElementById('course').style.visibility = 'visible';
     }
+
+    var uniselect = document.getElementById("uni");
+    uniselect.onchange = load_course();
+    uniselect.onload = load_course();
+    
+    /*document.getElementById('course').style.visibility = 'hidden';
+    document.getElementById("uni").onchange = function () {
+        var uni = this.value;
+        if (uni === "") return; // please select - possibly you want something else here
+        jQuery.ajax(GITRAW + "Python/uni/" + uni + "_courses.json", {
+            async: true, success: function (fees) {
+                jQuery('#course')
+                    .find('option')
+                    .remove()
+                    .end();
+                if (!LOCALISED) {
+                    fees = JSON.parse(fees);
+                }
+                jQuery.each(fees, function (i, item) {
+                    jQuery('#course').append(jQuery('<option>', {
+                        value: item,
+                        text: item
+                    }));
+                });
+            }
+        });
+        document.getElementById('course').style.visibility = 'visible';
+    }*/
 
     jQuery("#course").change(function () {
         get_course_cost_salary();
