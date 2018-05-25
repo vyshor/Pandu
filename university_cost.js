@@ -27,11 +27,25 @@ function university_cost_on_load() {
         document.getElementById('course').style.visibility = 'visible';
     }
 
+    $("#course").change(function () {
+        get_course_cost_salary();
+    })
+
+    $("#study_loan").change(function () {
+        get_course_cost_salary();
+    })
+
+    $("#hostel").change(function () {
+        get_course_cost_salary();
+    })
+
 }
 
 function get_course_cost_salary(){
+    jQuery("#save_table").toggleClass("invisible", false);
     var course = document.getElementById("course").value;
     var uni = document.getElementById("uni").value;
+    estimated_monthly_expenditure();
     if (course === "") return; // please select - possibly you want something else here
 
     jQuery.ajax(GITRAW + "Python/uni/" + uni + "_cost_salary.json", {
@@ -39,11 +53,19 @@ function get_course_cost_salary(){
             if (!LOCALISED) {
                 cost_salary = JSON.parse(cost_salary);
             }
-            console.log(cost_salary);
             document.getElementById("course_fees").innerHTML = "S$" + cost_salary[course]["cost"];
             document.getElementById("median_salary").innerHTML = "S$" + parseFloat(cost_salary[course]["median_salary"]).toFixed(2);
             document.getElementById("course_duration").innerHTML = cost_salary[course]["duration"] + " years";
-            get_study_loan_repayment(parseInt(parseFloat(cost_salary[course]["median_salary"]).toFixed(2) * parseInt(cost_salary[course]["duration"])), 2)
+            jQuery("#course_fees_wrapper").toggleClass("invisible", false);
+            jQuery("#median_salary_wrapper").toggleClass("invisible", false);
+            jQuery("#course_duration_wrapper").toggleClass("invisible", false);
+            if (document.getElementById("study_loan").checked) {
+                get_study_loan_repayment(parseInt(Math.ceil(parseFloat(cost_salary[course]["median_salary"]).toFixed(2) * parseFloat(cost_salary[course]["duration"])/ 100.0) * 100), 2);
+            } else {
+                jQuery("#interest_rate_wrapper").toggleClass("invisible", true);
+                jQuery("#monthly_repayment_wrapper").toggleClass("invisible", true);
+            }
+
         }
     });
 }
@@ -69,6 +91,8 @@ function get_study_loan_repayment(amount, duration) {
             var loan_info = process_study_load_request(this.responseText);
             document.getElementById("interest_rate").innerHTML = loan_info[0] + "%";
             document.getElementById("monthly_repayment").innerHTML = 'S$' + loan_info[1];
+            jQuery("#interest_rate_wrapper").toggleClass("invisible", false);
+            jQuery("#monthly_repayment_wrapper").toggleClass("invisible", false);
 
         }
     });
@@ -78,3 +102,9 @@ function get_study_loan_repayment(amount, duration) {
 
 }
 
+function save_table() {
+    //.find("*").removeAttr("id")
+    var to_append = jQuery("#course_selected").clone().toggleClass("comparison_column", true);
+    to_append.find("input[name='save']").remove();
+    to_append.appendTo("#comparison_table");
+}

@@ -1,0 +1,33 @@
+#selection_wrapper {
+    background: lightgreen;
+    width: 1000px;
+    border: 1px solid black;
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+
+#course_selection {
+    width: 300px;
+    float: left; /* add this */
+    border: 1px solid red;
+}
+
+#course_selected {
+    border: 1px solid green;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
+#comparison_table {
+    background: cornflowerblue;
+    width: 1000px;
+    border: 1px solid black;
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+.invisible {
+    visibility: hidden
+}
+
+.comparison_column {
+    border: 1px solid green;
+    float: left;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}

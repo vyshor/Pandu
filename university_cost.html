@@ -4,8 +4,11 @@
         <meta charset="UTF-8">
         <!--Deployed these when localised-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="LOCALISED.js"></script>
         <script src="university_cost.js"></script>
+        <script src="university_living_expense.js"></script>
+        <link rel="stylesheet" href="university_cost.css">
         <!--End of localised deployment-->
         <!--<script src="bundle.js"></script>-->
         <!---->
@@ -13,33 +16,84 @@
         <!--<script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>-->
         <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_cost.js"></script>-->
         <!--End of online deployment-->
-        <script> window.onload = function () {university_cost_on_load();}</script>
+        <script> window.onload = function () {
+            university_cost_on_load();
+            // university_living_on_load();
+        }</script>
 
         <title>Title</title>
     </head>
     <body>
-        <form>
-            University:
-            <select name="Uni" id="uni">
-                <option value="NUS">NUS</option>
-                <option value="NTU">NTU</option>
-                <option value="SMU">SMU</option>
-            </select>
-            <br>
-            Course:
-            <select name="Course" id="course"></select>
-            <br>
-            Annual Course Fees: <div id="course_fees"></div>
-            <br>
-            Course Duration: <div id="course_duration"></div>
-            <br>
-            Median Salary: <div id="median_salary"></div>
-            <br>
-            Interest Rate: <div id="interest_rate"></div>
-            <br>
-            Monthly Repayment: <div id="monthly_repayment"></div>
-            <input name="calculate" type="button" value="Calculate" onclick="get_course_cost_salary()">
+        <div id="overall_wrapper">
+            <div id="selection_wrapper">
+                <div id="course_selection">
+                    <form>
+                        University:
+                        <select name="Uni" id="uni">
+                            <option value="NUS">NUS</option>
+                            <option value="NTU">NTU</option>
+                            <option value="SMU">SMU</option>
+                        </select>
+                        <br>
+                        Course:
+                        <select name="Course" id="course"></select>
+                        <br>
+                        <input type="checkbox" name="hostel" id="hostel"/> Staying in Hostel?
+                        <br>
+                        Monthly Income (if any): <input type="text" name="Monthly_income" id="monthly_income"/>
+                        <input name="calculate" type="button" value="Calculate" onclick="get_course_cost_salary()">
+                        <br>
+                        <input type="checkbox" name="Study_loan" id="study_loan"/> Taking Study Loan?
+                        <br>
 
-        </form>
+
+                    </form>
+                </div>
+                <div id="course_selected">
+                    <div id="course_fees_wrapper" class="invisible">
+                        Annual Tuition Fees:
+                        <div id="course_fees"></div>
+                        <br>
+                    </div>
+                    <div id="course_duration_wrapper" class="invisible">
+                        Normal Candidature:
+                        <div id="course_duration"></div>
+                        <br>
+                    </div>
+                    <div id="median_salary_wrapper" class="invisible">
+                        Median Gross Salary:
+                        <div id="median_salary"></div>
+                        <br>
+                    </div>
+                    <div id="expense_wrapper" class="invisible">
+                        Monthly Living Expense:
+                        <div id="expense"></div>
+                    </div>
+
+                    <br>
+                    <div id="expense_breakdown_wrapper" class="invisible">
+                        <!--Expense Breakdown:-->
+                        <div id="expense_breakdown" style="width: 400px; height: 200px;"></div>
+                    </div>
+
+                    <div id="interest_rate_wrapper" class="invisible">
+                        Interest Rate:
+                        <div id="interest_rate"></div>
+                        <br>
+                    </div>
+                    <div id="monthly_repayment_wrapper" class="invisible">
+                        Monthly Repayment:
+                        <div id="monthly_repayment"></div>
+                        <br>
+                    </div>
+
+                    <input id="save_table" name="save" type="button" value="Save" onclick="save_table()" class="invisible">
+
+                </div>
+
+
+            </div>
+        </div>
+        <div id="comparison_table"></div>
     </body>
 </html>

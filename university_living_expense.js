@@ -55,7 +55,27 @@ function university_living_on_load() {
     // }
 }
 
-function calculate_expenditure_with_hostel(monthly_expense) {
+google.charts.load('current', {'packages':['corechart']});
+var expense_chart;
+// google.charts.setOnLoadCallback(drawChart);
+
+function drawChart(data_points) {
+    var data = google.visualization.arrayToDataTable(data_points);
+    var options = {
+        title: 'Expense Breakdown'
+    };
+
+    if (expense_chart != null)  {
+        expense_chart.clearChart();
+    }
+
+    chart = new google.visualization.PieChart(document.getElementById('expense_breakdown'));
+    chart.draw(data, options);
+    jQuery("#expense_breakdown_wrapper").toggleClass("invisible", false);
+    expense_chart = chart;
+}
+
+function calculate_expenditure_with_hostel(monthly_expense, without_with_hostel) {
     var data = JSON.stringify(false);
     var xhr = new XMLHttpRequest();
     // xhr.withCredentials = true;
@@ -63,9 +83,23 @@ function calculate_expenditure_with_hostel(monthly_expense) {
         if (this.readyState === this.DONE) {
             const individual_expense = JSON.parse(this.responseText);
             var hostel_fees;
-            monthly_expense -= individual_expense[2]["IndividualExpense"]; // minus housing and related expenses
-            monthly_expense -= individual_expense[4]["IndividualExpense"] * 0.5; // minus transport expense by half
-            monthly_expense -= individual_expense[8]["IndividualExpense"]; // minus accomodation expenses
+            var data_points = [["Type", "Expense (S$)"]];
+            if (without_with_hostel) {
+                monthly_expense -= individual_expense[2]["IndividualExpense"]; // minus housing and related expenses
+                monthly_expense -= individual_expense[4]["IndividualExpense"] * 0.5; // minus transport expense by half
+                monthly_expense -= individual_expense[8]["IndividualExpense"]; // minus accommodation expenses
+
+                const removed_category = ["Housing And Related Expenses", "Accommodation Services"];
+                for (var idx = 0; idx < Object.keys(individual_expense).length; idx++) {
+                    if (removed_category.indexOf(jQuery.trim(individual_expense[idx]['ExpenseName'])) === -1) {
+                        data_points.push([jQuery.trim(individual_expense[idx]['ExpenseName']), parseFloat(parseFloat(individual_expense[idx]["IndividualExpense"]).toFixed(2))]);
+                    }
+                }
+            } else {
+                for (var idx = 0; idx < Object.keys(individual_expense).length; idx++) {
+                    data_points.push([jQuery.trim(individual_expense[idx]['ExpenseName']), parseFloat(parseFloat(individual_expense[idx]["IndividualExpense"]).toFixed(2))]);
+                }
+            }
 
             jQuery.ajax(GITRAW + "Python/uni/" + document.getElementById("uni").value + "_hostel.json", {
                 async: true, success: function (fees) {
@@ -75,10 +109,16 @@ function calculate_expenditure_with_hostel(monthly_expense) {
                     monthly_expense += fees[0];
                     hostel_fees = fees[0];
 
-                    document.getElementById("expense").innerHTML = "$" + parseFloat(monthly_expense).toFixed(2);
-                    document.getElementById("hostel_fees").innerHTML = "Hostels Fees: $" + parseFloat(hostel_fees).toFixed(2);
+                    document.getElementById("expense").innerHTML = "S$" + parseFloat(monthly_expense).toFixed(2);
+                    jQuery("#expense_wrapper").toggleClass("invisible", false);
+                    // document.getElementById("hostel_fees").innerHTML = "Hostels Fees: $" + parseFloat(hostel_fees).toFixed(2);
+                    if (without_with_hostel) {
+                        data_points.push(["Hostel Expenses", hostel_fees]);
+                    }
+                    drawChart(data_points);
                 }
             });
+
 
             // console.log("monthly expense: " + monthly_expense);
         }
@@ -88,22 +128,22 @@ function calculate_expenditure_with_hostel(monthly_expense) {
 }
 
 function estimated_monthly_expenditure() {
+    var monthly_income;
+    if (document.getElementById('monthly_income').value === '') {
+        monthly_income = 0;
+    } else {
+        monthly_income = document.getElementById('monthly_income').value;
+    }
     var data = JSON.stringify(false);
     var xhr = new XMLHttpRequest();
     // xhr.withCredentials = true;
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
             var expense = JSON.parse(this.responseText);
-            if (document.getElementById("hostel").checked) {
-                calculate_expenditure_with_hostel(expense);
-            } else {
-                document.getElementById("expense").innerHTML = "$" + parseFloat(expense).toFixed(2);
-                document.getElementById("hostel_fees").innerHTML = "";
-
-            }
+            calculate_expenditure_with_hostel(expense, document.getElementById("hostel").checked);
         }
     });
-    xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + 0);
+    xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + monthly_income);
     xhr.send(data);
 
 }
