@@ -27,19 +27,20 @@ function university_cost_on_load() {
         document.getElementById('course').style.visibility = 'visible';
     }
 
-    jQuery("#course").change(function () {
-        get_course_cost_salary();
-    });
-
-    jQuery("#study_loan").change(function () {
-        get_course_cost_salary();
-    });
-
-    jQuery("#hostel").change(function () {
-        get_course_cost_salary();
-    });
-
 }
+
+// Not sure why, but these functions have to be outside
+jQuery("#course").change(function () {
+    get_course_cost_salary();
+});
+
+jQuery("#study_loan").change(function () {
+    get_course_cost_salary();
+});
+
+jQuery("#hostel").change(function () {
+    get_course_cost_salary();
+});
 
 function get_course_cost_salary(){
     jQuery("#save_table").toggleClass("invisible", false);
