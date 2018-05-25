@@ -54,9 +54,8 @@ function university_living_on_load() {
     //     document.getElementById("course_fees").innerHTML = result;
     // }
 }
-if (LOCALISED) {
-    google.charts.load('current', {'packages':['corechart']});
-}
+
+google.charts.load('current', {'packages':['corechart']});
 var expense_chart;
 // google.charts.setOnLoadCallback(drawChart);
 
