@@ -1,5 +1,6 @@
 from fastkml import kml
 import pandas as pd
+import pickle
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 import time
@@ -42,17 +43,37 @@ for location in df:
         no_location.append(location)
 
 # print(len(no_location))
+mydict = {}
 
 URL = 'https://www.gps-coordinates.net/'
 browser = Chrome(WEBDRIVER_PATH)
 browser.get(URL)
-browser.find_element_by_id('address').click()
-time.sleep(5)
-keyboard.press_and_release('ctrl+a, delete')
-keyboard.write('Loyang')
-keyboard.press_and_release('down, enter')
+for location in df:
+    browser.find_element_by_id('address').click()
+    time.sleep(2)
+    keyboard.press_and_release('ctrl+a, delete')
+    keyboard.write(location + " Singapore")
+    keyboard.press('down')
+    time.sleep(0.3)
+    keyboard.release('down')
+    keyboard.press('down')
+    time.sleep(0.3)
+    keyboard.release('down')
+    keyboard.press('enter')
+    time.sleep(0.3)
+    keyboard.release('enter')
+    browser.find_element_by_class_name('btn-primary').click()
+
+    mydict[location] = browser.find_element_by_id('info_window').get_attribute("innerHTML")
+    print(location)
+
+with open('places.p', 'wb') as f:
+    pickle.dump(mydict, f)
+
 # keyboard.press('down')
-# keyboard.press('enter')
+
+# keyboard.press_and_release('down, enter')
+# keyboard.press('down')
 
 # for _ in range(20):
 #     browser.find_element_by_id('address').send_keys(Keys.DELETE)
