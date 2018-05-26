@@ -99,6 +99,8 @@ function prepare_api_inputs_house_monthly(house_price, months_to_go, downpayment
 function prepare_api_inputs_house_price() {
     var location = jQuery('#location').val();
     var housing = jQuery('#housing').val().split(" ");
+    if (location === 'All' || housing[0] === 'All')
+        return " "; // If you really want to put error message, you can put here
     // Process the housing picked
     if (housing[0] !== 'Executive') {
         housing[0] = housing[0][0].toLowerCase() + housing[0].substr(1);
@@ -148,7 +150,11 @@ function get_house_price() {
         }
     });
 
-    xhr.open("GET", "http://microservice.dev.bambu.life/api/generalCalculator/houseCostCalculatorV2s/getHousePrice?" + prepare_api_inputs_house_price());
+    const request_text = prepare_api_inputs_house_price(); // In case if they put All or All in any of the dropdown
+    if (request_text === " ")
+        return;
+
+    xhr.open("GET", "http://microservice.dev.bambu.life/api/generalCalculator/houseCostCalculatorV2s/getHousePrice?" + request_text);
 
     xhr.send(data);
 }

@@ -6,8 +6,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 import keyboard
 
-WEBDRIVER_PATH = 'uni/chromedriver'
-kml_file = '../version0.04.kml'
+WEBDRIVER_PATH = '../uni/chromedriver'
+kml_file = 'version0.04.kml'
 with open(kml_file, 'rt', encoding="utf-8") as myfile:
     doc=myfile.read().encode('utf-8')
 
@@ -31,7 +31,7 @@ for idx, _ in enumerate(f3):
     lst.append(f3[idx].name)
 
 
-PATH_FILE = 'room_types/All.json'
+PATH_FILE = '../room_types/All.json'
 df = pd.read_json(PATH_FILE)
 df = list(df[0])[:-1]
 # print(len(df))

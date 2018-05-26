@@ -11,7 +11,7 @@ from shapely.geometry import Point, shape
 
 with open('places.p', 'rb') as f:
     mydict = pickle.load(f)
-kml_file = '../version0.04.kml'
+kml_file = 'version0.04.kml'
 
 
 for key in mydict.keys():

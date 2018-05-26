@@ -20,7 +20,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script src="LOCALISED.js"></script>
+        <script src="../../LOCALISED.js"></script>
         <script src="map.js"></script>
         <script src="house_price.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANzkX8usvRMGp7TJSLFVaFtq-rCXSXfQ0&callback=initMap" async defer></script>
@@ -45,6 +45,9 @@
             <div id="housing_wrapper">
                 Housing Types:
                 <select name="Housing" id="housing" class="housing"></select>
+            </div>
+            <div id="get_price_wrapper">
+                <input name="House Price" type="button" id="get_price" value="Get Price" onclick="get_house_price()">
             </div>
             Loan Period: <input type="text" id="loan_period" class="loan_period" readonly style="border:0; color:#f6931f; font-weight:bold;">
             <div class="slider-range-loan_period"></div>
