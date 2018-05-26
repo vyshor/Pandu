@@ -22,14 +22,23 @@
         <title>Title</title>
     </head>
     <body>
+        <div id="chart_div" style="width: 900px; height: 500px"></div>
         <form>
-            Annual Investment:
-            <input name="Annual Investment" type="text" id="annual_invest" value="1000">
-            <div id="slider-range-risk"></div>
+            <div id="annual_invest_wrapper">
+                Annual Investment: S$<input name="Annual Investment" type="text" id="annual_invest" style="border:0; color:#f6931f; font-weight:bold;" value="1000">
+                <div id="slider-range-invest"></div>
+            </div>
 
-            <div id="slider-range-period"></div>
+            <div id="risk_wrapper">
+                Risk:
+                <div id="slider-range-risk"></div>
+            </div>
+
+            <div id="period_wrapper">
+                Period: <input type="text" id="period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                <div id="slider-range-period"></div>
+            </div>
             <input name="Graph" type="button" value="Graph" onclick="testing()">
-            <div id="chart_div" style="width: 900px; height: 500px"></div>
         </form>
     </body>
 </html>

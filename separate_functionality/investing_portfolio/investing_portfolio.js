@@ -1,3 +1,5 @@
+var investing_chart;
+
 jQuery( function() {
     jQuery( "#slider-range-risk" ).slider({
         range: true,
@@ -6,17 +8,35 @@ jQuery( function() {
         step: 1,
         values: [ 4, 6 ],
         slide: function( event, ui ) {
+            graph_returns();
         }
     });
 
     jQuery( "#slider-range-period" ).slider({
         range: false,
-        min: 0,
+        min: 1,
         max: 40,
         value: 10,
+        step: 1,
         slide: function( event, ui ) {
+            jQuery("#period").val(ui.value + " years");
+            graph_returns();
         }
     });
+    jQuery("#period").val(jQuery("#slider-range-period").slider("value") + " years");
+
+    jQuery( "#slider-range-invest" ).slider({
+        range: false,
+        min: 1000,
+        max: 50000,
+        value: 5000,
+        step: 1000,
+        slide: function( event, ui ) {
+            jQuery("#annual_invest").val(ui.value);
+            graph_returns();
+        }
+    });
+    jQuery("#annual_invest").val(jQuery("#slider-range-invest").slider("value"));
 } );
 
 
@@ -117,13 +137,18 @@ function drawCurveTypes(data_points, high_low) {
         }
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    if (expense_chart != null)  {
+        expense_chart.clearChart();
+    }
+
+    chart = new google.visualization.LineChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+    investing_chart = chart;
 }
 
 var accumulated_data = [];
 google.charts.load('current', {packages: ['corechart', 'line']});
-google.charts.setOnLoadCallback(graph_returns);
+// google.charts.setOnLoadCallback(graph_returns);
 
 function testing() {
     var data = JSON.stringify({
@@ -132,14 +157,14 @@ function testing() {
         "confidence": "0.95",
         "discreteExpectedVolatility": "0.1103",
         "discreteExpectedReturnPerAnnum": "0.0514",
-        "initialInvestment": "0",
+        "initialInvestment": "1000",
         "annualInvestment": "1000",
         "currentYear": "2018",
         "period": "beg"
     });
 
     var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
+    // xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
