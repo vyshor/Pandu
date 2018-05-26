@@ -15,7 +15,7 @@ function house_price_on_load() {
             });
             jQuery('#housing').val('All');
         }
-    })
+    });
     // On change
     document.getElementById("location").onchange = function () {
         var location = this.value;
@@ -40,7 +40,8 @@ function house_price_on_load() {
                 jQuery('#housing').val(selected_value);
             }
         });
-    }
+        location_dropdown_to_kml(location);
+    };
 
     // Set the default all housing, and change the location when housing changed
     // Default
@@ -57,12 +58,18 @@ function house_price_on_load() {
             });
             jQuery('#location').val('All');
         }
-    })
+    });
     // On change
-    document.getElementById("housing").onchange = function () {
+    housing_on_change();
+    update_slider_loan_period();
+}
+
+function housing_on_change () {
+    jQuery('.housing').change(function () {
         var housing = this.value;
         if (housing === "") return; // please select - possibly you want something else here
 
+        jQuery('.housing').val(housing);
         jQuery.ajax(GITRAW + "Python/room_types/" + housing + ".json", {
             async: false, success: function (housing) {
                 const selected_value = jQuery('#location').val();
@@ -82,7 +89,7 @@ function house_price_on_load() {
                 jQuery('#location').val(selected_value);
             }
         });
-    }
+    });
 }
 
 function prepare_api_inputs_house_monthly(house_price, months_to_go, downpayment_pct) {
@@ -105,7 +112,7 @@ function prepare_api_inputs_house_price() {
     return "country=Singapore&locationInput=" + location + "&houseTypeInput=" + housing[1] + "&roomTypeInput=" + housing[0];
 }
 
-function get_house_monthly(house_price) {
+function get_house_monthly(house_price, loan_period) {
     var data = JSON.stringify(false);
 
     var xhr = new XMLHttpRequest();
@@ -116,11 +123,13 @@ function get_house_monthly(house_price) {
             var monthly_payment = this.responseText;
             monthly_payment = JSON.parse(monthly_payment);
             monthly_payment = monthly_payment['MinMonthlyPayment'];
-            jQuery('#house_monthly').html("Monthly Repayment: " + parseFloat(monthly_payment).toFixed(2));
+            jQuery('#house_price').html(parseInt(house_price).toLocaleString());
+            jQuery('#down_payment').html(parseInt(0.2 * parseFloat(house_price)).toLocaleString());
+            jQuery('#house_monthly').html(parseInt(monthly_payment).toLocaleString());
         }
     });
 
-    xhr.open("GET", "http://dev.bambu.life:8081/api/MortgageCalculator?" + prepare_api_inputs_house_monthly(house_price,60,0.2));
+    xhr.open("GET", "http://dev.bambu.life:8081/api/MortgageCalculator?" + prepare_api_inputs_house_monthly(house_price,loan_period*12,0.2));
 
     xhr.send(data);
 }
@@ -129,12 +138,13 @@ function get_house_price() {
     var data = JSON.stringify(false);
     var xhr = new XMLHttpRequest();
     // xhr.withCredentials = true;
+    const loan_period = parseInt(jQuery('#loan_period').val());
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
             var house_price = JSON.parse(this.responseText);
             house_price = parseFloat(house_price['housePrice'][0]['price']).toFixed(2);
-            get_house_monthly(house_price);
+            get_house_monthly(house_price, loan_period);
         }
     });
 
@@ -143,3 +153,19 @@ function get_house_price() {
     xhr.send(data);
 }
 
+function update_slider_loan_period () {
+    jQuery(function () {
+        jQuery(".slider-range-loan_period").slider({
+            range: false,
+            min: 5,
+            max: 40,
+            step: 1,
+            value: 10,
+            slide: function (event, ui) {
+                jQuery(".loan_period").val(ui.value + " years");
+                jQuery(".slider-range-loan_period").slider("value", ui.value);
+            }
+        });
+        jQuery(".loan_period").val(jQuery(".slider-range-loan_period").slider("value") + " years");
+    });
+}

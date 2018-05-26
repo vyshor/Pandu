@@ -3,10 +3,27 @@
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
+        <style>
+            .top{
+                margin-top: -90px;
+            }
+
+            #map{
+                max-width: 100%;
+                max-height: 100%;
+                min-width: 60vw;
+                min-height: 80vh;
+            }
+        </style>
         <!--Deployed these when localised-->
-        <script src="LOCALISED.js"></script>
-        <script src="house_price.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="LOCALISED.js"></script>
+        <script src="map.js"></script>
+        <script src="house_price.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANzkX8usvRMGp7TJSLFVaFtq-rCXSXfQ0&callback=initMap" async defer></script>
         <!--End of localised deployment-->
         <!---->
         <!--Deployed these when using online-->
@@ -14,18 +31,37 @@
         <!--<script src="https://rawgit.com/vyshor/university_expense/master/house_price.js"></script>-->
         <!--End of online deployment-->
 
-        <script> window.onload = function () {house_price_on_load();}</script>
+        <script> window.onload = function () {
+            house_price_on_load();
+        }</script>
     </head>
     <body>
+        <div id="map"></div>
         <form>
-            Location:
-            <select name="Location" id="location"></select>
-            Housing Types:
-            <select name="Housing" id="housing"></select>
+            <div id="location_wrapper">
+                Location:
+                <select name="Location" id="location"></select>
+            </div>
+            <div id="housing_wrapper">
+                Housing Types:
+                <select name="Housing" id="housing" class="housing"></select>
+            </div>
+            Loan Period: <input type="text" id="loan_period" class="loan_period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            <div class="slider-range-loan_period"></div>
             <br>
-            <div id="house_monthly"></div>
+            <div id="house_monthly_wrapper">
+                Price: S$
+                <div id="house_price"></div>
+            </div>
+            <div id="down_payment_wrapper">
+                Down payment: S$
+                <div id="down_payment"></div>
+            </div>
+            <div id="house_monthly_wrapper">
+                Monthly Repayment: S$
+                <div id="house_monthly"></div>
+            </div>
             <br>
-            <input name="House Price" type="button" value="house_price" onclick="get_house_price()">
         </form>
     </body>
 </html>
