@@ -62,7 +62,8 @@ var expense_chart;
 function drawChart(data_points) {
     var data = google.visualization.arrayToDataTable(data_points);
     var options = {
-        title: 'Expense Breakdown'
+        title: 'Expense Breakdown',
+        backgroundColor: { fill:'transparent' }
     };
 
     if (expense_chart != null)  {

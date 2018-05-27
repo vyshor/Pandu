@@ -14,6 +14,9 @@
                         text: item
                     }));
                 });
+                jQuery('#uni').find('option:eq(0)').prop('selected', true);
+                jQuery('#course').find('option:eq(0)').prop('selected', true);
+                get_course_cost_salary();
             }
         });
         document.getElementById('course').style.visibility = 'visible';

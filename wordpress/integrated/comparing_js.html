@@ -1,0 +1,32 @@
+<script type="text/javascript">
+    function compare_everything() {
+        // For uni
+        var to_append = jQuery("#comparison_table_uni").clone();
+        to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_uni", true);
+        jQuery('#comparison_table_uni').children.remove();
+        to_append.appendTo('#comparing_table_uni');
+
+        // For house
+        to_append = jQuery("#comparison_table_house").clone();
+        to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_house", true);
+        jQuery('#comparison_table_house').children.remove();
+        to_append.appendTo('#comparing_table_house');
+
+        jQuery('.comparing_now_uni').click(function() {
+            jQuery('.comparing_now_uni_selected').toggleClass('comparing_now_uni_selected');
+            jQuery(this).toggleClass('comparing_now_uni_selected');
+        });
+
+        jQuery('.comparing_now_house').click(function() {
+            jQuery('.comparing_now_house_selected').toggleClass('comparing_now_house_selected');
+            jQuery(this).toggleClass('comparing_now_uni_selected');
+        });
+
+    }
+
+    function graph_comparison() {
+
+    }
+
+
+</script>

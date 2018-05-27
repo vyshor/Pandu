@@ -24,19 +24,26 @@
             });
             get_course_cost_salary();
             document.getElementById('course').style.visibility = 'visible';
-        }
+        };
 
         jQuery("#course").change(function () {
             get_course_cost_salary();
         });
 
-        jQuery("#study_loan").change(get_course_cost_salary);
+        jQuery("#study_loan").click(function () {
+            jQuery(this).toggleClass('selected_img');
+            get_course_cost_salary();
+        });
 
-        jQuery("#study_loan_no").change(get_course_cost_salary);
+        // jQuery("#study_loan_no").change(get_course_cost_salary);
 
-        jQuery("#hostel").change(get_course_cost_salary);
+        jQuery("#hostel").click(function () {
+            jQuery(this).toggleClass('selected_img');
+            get_course_cost_salary();
+        });
 
-        jQuery("#hostelno").change(get_course_cost_salary);
+        // jQuery("#hostelno").change(get_course_cost_salary);
+
     }
 
 
@@ -51,12 +58,12 @@
             async: true, success: function (cost_salary) {
                 cost_salary = JSON.parse(cost_salary);
                 document.getElementById("course_fees_wrapper").innerHTML = "Annual Tuition Fees: S$" + cost_salary[course]["cost"];
-                document.getElementById("median_salary_wrapper").innerHTML = "Median Gross Salary: S$" + parseFloat(cost_salary[course]["median_salary"]).toFixed(2);
+                document.getElementById("median_salary_wrapper").innerHTML = "Median Gross Salary: S$" + parseInt(cost_salary[course]["median_salary"]);
                 document.getElementById("course_duration_wrapper").innerHTML = "Normal Candidature: " + cost_salary[course]["duration"] + " years";
                 jQuery("#course_fees_wrapper").toggleClass("invisible", false);
                 jQuery("#median_salary_wrapper").toggleClass("invisible", false);
                 jQuery("#course_duration_wrapper").toggleClass("invisible", false);
-                if (document.getElementById("study_loan").checked) {
+                if (jQuery("#study_loan").hasClass('selected_img')) {
                     jQuery("#payback_period_wrapper").toggleClass("invisible", false);
                     get_study_loan_repayment(parseInt(Math.ceil(parseFloat(cost_salary[course]["cost"]).toFixed(2) * parseFloat(cost_salary[course]["duration"]) / 100.0) * 100), jQuery("#slider-range-payback_period").slider("value"));
                 } else {
@@ -111,11 +118,58 @@
 
     }
 
-    function save_table() {
+
+    function save_table_uni() {
         //.find("*").removeAttr("id")
         var to_append = jQuery("#course_selected").clone().toggleClass("comparison_column", true);
+
+        // Payback period
+        if (jQuery('#study_loan').hasClass('selected_img')) {
+            const to_append_payback_contents = jQuery("<div id='university_wrapper'>Payback Period: " + jQuery("#payback_period").val() + "</div>");
+            to_append.append(to_append_payback_contents);
+        }
+
+        // Expense breakdown
+        const to_append_table = jQuery("#expense_breakdown_wrapper").clone().toggleClass("invisible", true);
+        to_append.append(to_append_table);
+
+        // University and course
+        const university_course_contents = "<div id='university_wrapper'>University: " + jQuery('#uni').val() + "</div><div id='course_wrapper'>Course: " + jQuery('#course').val() + "</div>";
+        const to_add_stuff = jQuery(university_course_contents);
+        to_add_stuff.prependTo(to_append);
         to_append.find("input[name='save']").remove();
-        to_append.appendTo("#comparison_table");
+
+        // Close save button
+        const remove_button = "<div style=\"position: relative\"><img class='remove_table' src=\"http://wecision.com/enterprise/images/icons/closeIcon.png\" style=\"position: absolute; top: 4px; right: 5px\"/></div>";
+        to_append.prepend(jQuery(remove_button));
+        //
+        to_append.appendTo("#comparison_table_uni");
+
+        // Set the remove button function
+        jQuery('.remove_table').click(function () {
+            jQuery(this).closest('.comparison_column').remove();
+        })
+    }
+
+    function save_table_house() {
+        var to_append = jQuery("#house_price_wrapper").clone().toggleClass("comparison_column", true);
+
+        // Location and house type
+        const location_housetype_contents = "<div id='university_wrapper'>Location: " + jQuery('#location').val() + "</div><div id='course_wrapper'>House Type: " + jQuery('#housing').val() + "</div>";
+        const to_add_stuff = jQuery(location_housetype_contents);
+        to_add_stuff.prependTo(to_append);
+
+        // Close save button
+        const remove_button = "<div style=\"position: relative\"><img class='remove_table' src=\"http://wecision.com/enterprise/images/icons/closeIcon.png\" style=\"position: absolute; top: 4px; right: 5px\"/></div>";
+        to_append.prepend(jQuery(remove_button));
+
+        to_append.appendTo("#comparison_table_house");
+
+        // Set the remove button function
+        jQuery('.remove_table').click(function () {
+            jQuery(this).closest('.comparison_column').remove();
+        })
+
     }
 
     jQuery(function () {

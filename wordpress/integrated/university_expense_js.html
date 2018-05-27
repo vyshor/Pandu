@@ -37,6 +37,7 @@
             });
 
             document.getElementById('course').style.visibility = 'visible';
+
         }
 
 
@@ -57,11 +58,52 @@
     var expense_chart;
     // google.charts.setOnLoadCallback(drawChart);
 
+    function process_chart_keeptop(data_points, keep_number) {
+        if (keep_number >= data_points.length-1)
+            return data_points;
+        const data_points_header = data_points[0];
+        data_points.splice(0, 1);
+        var all_other_expenses = 0.;
+        for (var idx4 = 0; idx4 < data_points.length; idx4++) {
+            if (data_points[idx4][0].indexOf('Others') !== -1 ) {
+                all_other_expenses += parseFloat(data_points[idx4][1]);
+                data_points.splice(idx4, 1);
+                break;
+            }
+        }
+        var new_data_points = [data_points_header];
+        for (let idx = 0; idx < keep_number-1; idx++) {
+            let all_expenses = [];
+            for (var idx2 = 0; idx2 < data_points.length; idx2++) {
+                all_expenses.push(parseFloat(data_points[idx2][1]));
+            }
+
+            const all_expenses_max = Math.max(...all_expenses);
+            for (var idx3 = 0; idx3 < data_points.length; idx3++) {
+                if (data_points[idx3][1] === all_expenses_max) {
+                    new_data_points.push(data_points[idx3]);
+                    data_points.splice(idx3, 1);
+                    break;
+                }
+            }
+        }
+
+        for (var idx2 = 0; idx2 < data_points.length; idx2++) {
+            all_other_expenses += parseFloat(data_points[idx2][1]);
+        }
+        new_data_points.push(["Others", all_other_expenses]);
+        return new_data_points;
+    }
 
     function drawChart(data_points) {
+        data_points = process_chart_keeptop(data_points, 6); // keep only 5 columns
         var data = google.visualization.arrayToDataTable(data_points);
         var options = {
-            title: 'Expense Breakdown'
+            title: 'Expense Breakdown',
+            backgroundColor: { fill:'transparent' },
+            pieSliceText: 'label',
+            slices: {0 : {offset: 0.2}}
+            // chartArea:{left:0,top:0,width:'50%',height:'75%'}
         };
 
         if (expense_chart != null)  {
@@ -104,10 +146,13 @@
                 jQuery.ajax("https://raw.githubusercontent.com/vyshor/university_expense/master/Python/uni/" + document.getElementById("uni").value + "_hostel.json", {
                     async: true, success: function (fees) {
                         fees = JSON.parse(fees);
-                        monthly_expense += fees[0];
-                        hostel_fees = fees[0];
+                        if (without_with_hostel) {
+                            hostel_fees = fees.reduce(function(a, b) { return parseFloat(a) + parseFloat(b); });
+                            hostel_fees = parseFloat((hostel_fees / fees.length).toFixed(2));
+                            monthly_expense = parseFloat(monthly_expense) + hostel_fees;
+                        }
 
-                        document.getElementById("expense_wrapper").innerHTML = "Monthly Living Expense: S$" + parseFloat(monthly_expense).toFixed(2);
+                        document.getElementById("expense_wrapper").innerHTML = "Monthly Living Expense: S$" + parseInt(monthly_expense);
                         jQuery("#expense_wrapper").toggleClass("invisible", false);
                         // document.getElementById("hostel_fees").innerHTML = "Hostels Fees: $" + parseFloat(hostel_fees).toFixed(2);
                         if (without_with_hostel) {
@@ -138,7 +183,7 @@
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === this.DONE) {
                 var expense = JSON.parse(this.responseText);
-                calculate_expenditure_with_hostel(expense, document.getElementById("hostel").checked);
+                calculate_expenditure_with_hostel(expense, jQuery("#hostel").hasClass('selected_img'));
             }
         });
         xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + monthly_income);
