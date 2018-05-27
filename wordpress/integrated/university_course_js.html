@@ -151,7 +151,15 @@
         })
     }
 
-    function save_table_house() {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function save_table_house() {
+        while (jQuery('#house_price').html() === '') {
+            get_house_price(); // Because there is no outputs, so you force an input and wait for it to be response
+            await sleep(1000); // Just wanna wait for 1 second and check everytime if it is filled or not
+        }
         var to_append = jQuery("#house_price_wrapper").clone().toggleClass("comparison_column", true);
 
         // Location and house type

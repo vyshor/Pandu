@@ -99,8 +99,38 @@ function prepare_api_inputs_house_monthly(house_price, months_to_go, downpayment
 function prepare_api_inputs_house_price() {
     var location = jQuery('#location').val();
     var housing = jQuery('#housing').val().split(" ");
-    if (location === 'All' || housing[0] === 'All')
-        return " "; // If you really want to put error message, you can put here
+    // Auto select the first possible options for them
+    if (location === 'All') { // Easier, because the info window does not have location
+        jQuery('#location').find('option:eq(0)').prop('selected', true);
+        // But become stupidly dumb because I neeed to reupdate the dropdown for housing
+        jQuery.ajax("https://raw.githubusercontent.com/vyshor/university_expense/master/" + "Python/house_locations/" + jQuery('#location').val() + ".json", {
+            async: false, success: function (houses) {
+                const selected_value = jQuery('#housing').val();
+                jQuery('#housing')
+                    .find('option')
+                    .remove()
+                    .end();
+                if (!false) {
+                    houses = JSON.parse(houses);
+                }
+                jQuery.each(houses, function (i, item) {
+                    jQuery('#housing').append(jQuery('<option>', {
+                        value: item,
+                        text : item
+                    }));
+                });
+                jQuery('#housing').val(selected_value);
+            }
+        });
+        return prepare_api_inputs_house_price();
+    }
+    if (housing[0] === 'All') { // This one need to find class, need to change info window also
+        jQuery('.housing').find('option:eq(0)').prop('selected', true);
+        // Need reupdate also
+        housing_on_change();
+        return prepare_api_inputs_house_price();
+    } // If you really want to put error message, you can put here
+
     // Process the housing picked
     if (housing[0] !== 'Executive') {
         housing[0] = housing[0][0].toLowerCase() + housing[0].substr(1);

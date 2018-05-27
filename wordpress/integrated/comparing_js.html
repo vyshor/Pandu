@@ -3,15 +3,19 @@
         // For uni
         var to_append = jQuery("#comparison_table_uni").clone();
         to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_uni", true);
-        jQuery('#comparison_table_uni').children.remove();
+        to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
         to_append.appendTo('#comparing_table_uni');
 
         // For house
         to_append = jQuery("#comparison_table_house").clone();
         to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_house", true);
-        jQuery('#comparison_table_house').children.remove();
+        to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
         to_append.appendTo('#comparing_table_house');
 
+        // Remove all columns in sidebar
+        jQuery('.comparison_column').remove();
+
+        // Click selection to pick what they wanna graph
         jQuery('.comparing_now_uni').click(function() {
             jQuery('.comparing_now_uni_selected').toggleClass('comparing_now_uni_selected');
             jQuery(this).toggleClass('comparing_now_uni_selected');
@@ -21,6 +25,11 @@
             jQuery('.comparing_now_house_selected').toggleClass('comparing_now_house_selected');
             jQuery(this).toggleClass('comparing_now_uni_selected');
         });
+
+        // Cancel away the selection
+        jQuery('.remove_table').click(function () {
+            jQuery(this).closest('.comparing_now').remove();
+        })
 
     }
 
