@@ -187,8 +187,8 @@ function drawCurveTypes(data_points, high_low) {
         }
     };
 
-    if (expense_chart != null)  {
-        expense_chart.clearChart();
+    if (investing_chart != null)  {
+        investing_chart.clearChart();
     }
 
     chart = new google.visualization.LineChart(document.getElementById('chart_div'));

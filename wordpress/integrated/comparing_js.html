@@ -34,8 +34,156 @@
     }
 
     function graph_comparison() {
+        // First get all the information we need first
+        const uni_info = jQuery('.comparing_now_uni_selected');
+        const median_salary = parseInt(uni_info.children('#median_salary_wrapper').html().split(' ')[-1].slice(2).replace(/,/g, ""));
+        var estimated_expense = 0;
+        var liabilities = 0;
+        var payback_period = 0;
+        const house_info = jQuery('.comparing_now_house_selected');
+        // Need wait him to update the CSS to determine how to parse it
+        // const down_payment = parseInt(house_info.children('#down_payment').html().replace(/,/g, ""));
+
+        // To get estimated_expense
+        var data = JSON.stringify(false);
+        var xhr = new XMLHttpRequest();
+        // xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                expense = JSON.parse(this.responseText);
+            }
+        });
+        xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + median_salary);
+        xhr.send(data);
+        if (!uni_info.children('#monthly_repayment_wrapper').hasClass('invisible')) {
+            liabilities = parseInt(uni_info.children('#monthly_repayment_wrapper').html().split(' ')[-1].slice(2).replace(/,/g, ""));
+            payback_period = parseInt(uni_info.children('#payback_period_wrapper').html().split(' ')[-2]);
+            // Everything need to change to annual values and round off to thousands for ease
+            preset_sliders();
+        }
+        // End of request
+
+        // I think we got all the information le, our downpayment is the target
+        // Our control variables given beforehand are the risk portfolios
+        // The control variables that we need is max and minimum value of possible investment which is when expense = 0, minimum when expense = possible_investment
+        // Then we vary the time taken to reach the first downpayment
+    }
+
+
+    function preset_sliders(min_investment, max_investment, downpayment_target, estimated_investment, liabilities, liabilities_period) {
+        jQuery( function() {
+            jQuery( "#slider-range-risk" ).slider({
+                range: true,
+                min: 1,
+                max: 10,
+                step: 1,
+                values: [ 4, 6 ],
+                slide: function( event, ui ) {
+                    // graph_returns();
+                }
+            });
+
+            jQuery( "#slider-range-period" ).slider({
+                range: false,
+                min: 1,
+                max: 50,
+                value: 10,
+                step: 1,
+                slide: function( event, ui ) {
+                    jQuery("#period").val(ui.value + " years");
+                    // graph_returns();
+                }
+            });
+            jQuery("#period").val(jQuery("#slider-range-period").slider("value") + " years");
+
+            jQuery( "#slider-range-invest" ).slider({
+                range: false,
+                min: min_investment,
+                max: max_investment,
+                value: estimated_investment,
+                step: 1000,
+                slide: function( event, ui ) {
+                    jQuery("#annual_invest").val(ui.value);
+                    // graph_returns();
+                }
+            });
+            jQuery("#annual_invest").val(jQuery("#slider-range-invest").slider("value"));
+        } );
 
     }
 
+    // I think below this portion can be ported directly form investing_portfolio when investing_portfolio is working
+    // Till they fix their api
+    var accumulated_data; // plotting points
+    var investing_chart;
+    function get_graph_points(){
+        // Not functional yet so let keep it simple
+        // var data = prep_accumulation_api_input(portfolio);
+        console.log(data);
+        var xhr = new XMLHttpRequest();
+        // xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                var graph_data = JSON.parse(this.responseText);
+                console.log(graph_data);
+                graph_data = graph_data["graphArray"];
+                console.log(graph_data);
+                drawCurveTypes(graph_data, high_low);
+            }
+        });
+
+        xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators");
+        xhr.send(data);
+    }
+
+    function drawCurveTypes(data_points, high_low) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Higher Risk');
+        data.addColumn('number', 'Lower Risk');
+        // console.log(data_points);
+        // console.log(accumulated_data);
+        if (data_points.length > accumulated_data.length) {
+            for (var idx =0; idx < data_points.length; idx++) {
+                if (idx < accumulated_data.length) {
+                    accumulated_data[idx][high_low+1] = data_points[idx];
+                } else {
+                    accumulated_data.push([idx, 0, 0]);
+                    accumulated_data[idx][high_low+1] = data_points[idx];
+                }
+            }
+        } else {
+            for (var idx =0; idx < accumulated_data.length; idx++) {
+                if (idx < data_points.length) {
+                    accumulated_data[idx][high_low+1] = data_points[idx];
+                } else {
+                    accumulated_data.pop();
+                }
+            }
+
+        }
+        data.addRows(accumulated_data);
+
+        var options = {
+            hAxis: {
+                title: 'Time (Years)'
+            },
+            vAxis: {
+                title: 'Expected Returns ($)'
+            },
+            series: {
+                1: {curveType: 'function'}
+            }
+        };
+
+        if (investing_chart != null)  {
+            investing_chart.clearChart();
+        }
+
+        chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        investing_chart = chart;
+    }
 
 </script>

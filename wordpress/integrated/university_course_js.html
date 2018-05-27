@@ -125,7 +125,7 @@
 
         // Payback period
         if (jQuery('#study_loan').hasClass('selected_img')) {
-            const to_append_payback_contents = jQuery("<div id='university_wrapper'>Payback Period: " + jQuery("#payback_period").val() + "</div>");
+            const to_append_payback_contents = jQuery("<div id='payback_period_wrapper'>Payback Period: " + jQuery("#payback_period").val() + "</div>");
             to_append.append(to_append_payback_contents);
         }
 
@@ -163,7 +163,7 @@
         var to_append = jQuery("#house_price_wrapper").clone().toggleClass("comparison_column", true);
 
         // Location and house type
-        const location_housetype_contents = "<div id='university_wrapper'>Location: " + jQuery('#location').val() + "</div><div id='course_wrapper'>House Type: " + jQuery('#housing').val() + "</div>";
+        const location_housetype_contents = "<div id='location_wrapper'>Location: " + jQuery('#location').val() + "</div><div id='housetype_wrapper'>House Type: " + jQuery('#housing').val() + "</div>";
         const to_add_stuff = jQuery(location_housetype_contents);
         to_add_stuff.prependTo(to_append);
 
