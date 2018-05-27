@@ -1,0 +1,22 @@
+<script>
+    window.onload = function () {
+        university_cost_on_load();
+        jQuery.ajax("https://raw.githubusercontent.com/vyshor/university_expense/master/Python/uni/NUS_courses.json", {
+            async: true, success: function (fees) {
+                jQuery('#course')
+                    .find('option')
+                    .remove()
+                    .end();
+                fees = JSON.parse(fees);
+                jQuery.each(fees, function (i, item) {
+                    jQuery('#course').append(jQuery('<option>', {
+                        value: item,
+                        text: item
+                    }));
+                });
+            }
+        });
+        document.getElementById('course').style.visibility = 'visible';
+        house_price_on_load();
+    }
+</script>

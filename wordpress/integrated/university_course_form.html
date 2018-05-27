@@ -1,0 +1,28 @@
+<div id="course_selection">
+    <form>
+        University:
+        <select name="Uni" id="uni">
+            <option value="NUS">NUS</option>
+            <option value="NTU">NTU</option>
+            <option value="SMU">SMU</option>
+        </select>
+        <br>
+        Course:
+        <select name="Course" id="course"></select>
+        <br>
+        Staying in Hostel?<br>
+        <input type="radio" id="hostelno" name="hostel_option" value="nohostel" checked="checked"> No<br>
+        <input type="radio" id="hostel" name="hostel_option" value="hostel"> Yes<br>
+        <input type="text" name="Monthly_income" id="monthly_income" value="0" style="display: none;"/>
+        Taking Study Loan?<br>
+        <input type="radio" id="study_loan_no" name="Study_loan_option" value="noloan" checked="checked"> No<br>
+        <input type="radio" id="study_loan" name="Study_loan_option" value="loan"> Yes<br>
+        <br>
+        <div id="payback_period_wrapper" class="invisible">
+            Payback Period: <input type="text" id="payback_period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            <br>
+            <div id="slider-range-payback_period"></div>
+        </div>
+
+    </form>
+</div>

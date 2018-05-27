@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    function tab_control(tab_id) {
+        var i, tabnum;
+
+        tabnum = document.getElementsByClassName("vc_tta-panel");
+        for (i = 0; i < tabnum.length; i++) {
+            tabnum[i].className = tabnum[i].className.replace(" vc_active", "");
+        }
+
+        document.getElementById(tab_id).className += " vc_active";
+    }
+</script>

@@ -1,0 +1,25 @@
+<script>
+    function sidebar_toggle() {
+        var button = document.getElementById("sidebar_btn");
+        var sidebar = document.getElementById("sidebar");
+        var content = document.getElementById("content");
+
+        if (button.classList.contains('opened')) {
+            button.classList.remove('opened');
+            button.classList.add('closed');
+            sidebar.style.width = "10%";
+            content.style.width = "90%";
+            button.innerHTML = "&#9776;";
+            document.getElementById("custom_html-3").style.display = "none";
+            document.getElementById("custom_html-4").style.display = "none";
+        } else {
+            button.classList.remove('closed');
+            button.classList.add('opened');
+            sidebar.style.width = "25%";
+            content.style.width = "75%";
+            button.innerHTML = "&times;";
+            document.getElementById("custom_html-3").style = "";
+            document.getElementById("custom_html-4").style = "";
+        }
+    }
+</script>

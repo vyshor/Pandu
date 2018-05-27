@@ -1,8 +1,22 @@
-# university_expense
+# University | House | Investing Calculator
 
+### TL;DR
 
-<b>Information on the folder and files </b>
+Access [this website](http://)  to demo it
 
+### Filepaths of Each Calculator | Backend Side (without much CSS)
+
+<sub><sup><b><i>(Remember to set LOCALISED to 1 in LOCALISED.js to set up locally)</b></i></sup></sub>
+
+**University** : separate_functionality/university_cost_living/university_cost.html
+
+**Housing** : separate_functionality/house_price/house_prices.html
+
+**Investing** : separate_functionality/investing_portfolio/investing portfolio.html
+
+### Files Information
+
+**Information on the folder and files**
 
     Folder - separate_functionality | Individual Modules for the expense & investment calculator
         Folder - university_cost_living | Calculator for the cost of living in university and study loan repayments
@@ -20,3 +34,12 @@
     LOCALISED.js | Key javascript file to allow local server to work, set LOCALISED to 1
 
 
+### APIs or Modules Used
+
+**Python**
+
+    Pandas | Numpy | BeautifulSoup4 | Tabula | Selenium | Keyboard | FastKML | ElementTree | Shapely
+
+**Javascript**
+
+    jQuery | jQueryUI | Google Maps Javascript | Google Charts | Cross-Origin Resource Sharing

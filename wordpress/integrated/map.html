@@ -1,0 +1,29 @@
+<form>
+    <div id="location_wrapper">
+        Location:
+        <select name="Location" id="location"></select>
+    </div>
+    <div id="housing_wrapper">
+        Housing Types:
+        <select name="Housing" id="housing" class="housing"></select>
+    </div>
+    <div id="get_price_wrapper">
+        <input name="House Price" type="button" id="get_price" value="Get Price" onclick="get_house_price()">
+    </div>
+    Loan Period: <input type="text" id="loan_period" class="loan_period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    <div class="slider-range-loan_period"></div>
+    <br>
+    <div id="house_monthly_wrapper">
+        Price: S$
+        <div id="house_price"></div>
+    </div>
+    <div id="down_payment_wrapper">
+        Down payment: S$
+        <div id="down_payment"></div>
+    </div>
+    <div id="house_monthly_wrapper">
+        Monthly Repayment: S$
+        <div id="house_monthly"></div>
+    </div>
+    <br>
+</form>
