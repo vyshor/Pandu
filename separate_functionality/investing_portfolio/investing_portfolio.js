@@ -1,4 +1,12 @@
 var investing_chart;
+var pie_chart = [null, null];
+var accumulated_data = [];
+google.charts.load('current', {packages: ['corechart', 'line']});
+// google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(function () {
+    get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
+    get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
+});
 
 jQuery( function() {
     jQuery( "#slider-range-risk" ).slider({
@@ -8,7 +16,9 @@ jQuery( function() {
         step: 1,
         values: [ 4, 6 ],
         slide: function( event, ui ) {
-            graph_returns();
+            // graph_returns();
+            get_breakdown_portfolio(ui.values[1], 0);
+            get_breakdown_portfolio(ui.values[0], 1);
         }
     });
 
@@ -39,6 +49,46 @@ jQuery( function() {
     jQuery("#annual_invest").val(jQuery("#slider-range-invest").slider("value"));
 } );
 
+function get_breakdown_portfolio(portfolio_idx, high_low){
+    var data = JSON.stringify(false);
+    var xhr = new XMLHttpRequest();
+    // xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === this.DONE) {
+            const pie_points = JSON.parse(this.responseText);
+            var data_grp = [["Product Name", "Percentage"]];
+            for (var idx=0; idx < pie_points.length; idx++){
+                data_grp.push([pie_points[idx]["ProductName"], pie_points[idx]["ProductBreakdown"]]);
+            }
+            update_pie_chart(data_grp, high_low);
+        }
+    });
+    xhr.open("GET", "http://dev.bambu.life:8081/api/ModelPortfolioProductBreakdown/" + portfolio_idx);
+    xhr.send(data);
+}
+
+function update_pie_chart(data_grp, high_low) {
+    var data = google.visualization.arrayToDataTable(data_grp);
+    var chart_title;
+    if (high_low) { // if low risk
+        chart_title = "For Less Risk";
+    } else {
+        chart_title = "For More Risk";
+    }
+    var options = {
+        title: 'Product Breakdown ' + chart_title
+    };
+
+    if (pie_chart[high_low] != null)  {
+        pie_chart[high_low].clearChart();
+    }
+
+    chart = new google.visualization.PieChart(document.getElementById('breakdown_portfolio' + high_low));
+    chart.draw(data, options);
+    jQuery("#breakdown_portfolio_wrapper" + high_low).toggleClass("invisible", false);
+    pie_chart[high_low] = chart;
+}
 
 function prep_accumulation_api_input(portfolio){
     return JSON.stringify({
@@ -146,9 +196,6 @@ function drawCurveTypes(data_points, high_low) {
     investing_chart = chart;
 }
 
-var accumulated_data = [];
-google.charts.load('current', {packages: ['corechart', 'line']});
-// google.charts.setOnLoadCallback(graph_returns);
 
 function testing() {
     var data = JSON.stringify({

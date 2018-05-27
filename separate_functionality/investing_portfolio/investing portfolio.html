@@ -12,33 +12,55 @@
         <!--End of localised deployment-->
         <!--<script src="bundle.js"></script>-->
         <!---->
-        <!--Deployed thes   e when using online-->
+        <!--Deployed these when using online-->
         <!--<script src="https://rawgit.com/vyshor/university_expense/master/LOCALISED.js"></script>-->
         <!--<script src="https://rawgit.com/vyshor/university_expense/master/university_cost.js"></script>-->
         <!--End of online deployment-->
 
         <script></script>
-
+        <style>
+            #controls_wrapper {
+                float: left;
+                width: 50%;
+            }
+            #portfolio_details {
+                float: left;
+            }
+            .invisible {
+                visibility: hidden;
+            }
+        </style>
         <title>Title</title>
     </head>
     <body>
         <div id="chart_div" style="width: 900px; height: 500px"></div>
         <form>
-            <div id="annual_invest_wrapper">
-                Annual Investment: S$<input name="Annual Investment" type="text" id="annual_invest" style="border:0; color:#f6931f; font-weight:bold;" value="1000">
-                <div id="slider-range-invest"></div>
-            </div>
+            <div id="controls_wrapper">
+                <div id="annual_invest_wrapper">
+                    Annual Investment: S$<input name="Annual Investment" type="text" id="annual_invest"
+                                                style="border:0; color:#f6931f; font-weight:bold;" value="1000">
+                    <div id="slider-range-invest"></div>
+                </div>
 
-            <div id="risk_wrapper">
-                Risk:
-                <div id="slider-range-risk"></div>
-            </div>
+                <div id="risk_wrapper">
+                    Risk:
+                    <div id="slider-range-risk"></div>
+                </div>
 
-            <div id="period_wrapper">
-                Period: <input type="text" id="period" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                <div id="slider-range-period"></div>
+                <div id="period_wrapper">
+                    Period: <input type="text" id="period" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    <div id="slider-range-period"></div>
+                </div>
+                <input name="Graph" type="button" value="Graph" onclick="testing()">
             </div>
-            <input name="Graph" type="button" value="Graph" onclick="testing()">
+            <div id="portfolio_details">
+                <div id="breakdown_portfolio_wrapper0" class="invisible">
+                    <div id="breakdown_portfolio0"></div>
+                </div>
+                <div id="breakdown_portfolio_wrapper1" class="invisible">
+                    <div id="breakdown_portfolio1"></div>
+                </div>
+            </div>
         </form>
     </body>
 </html>
