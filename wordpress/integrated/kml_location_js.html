@@ -126,11 +126,11 @@ function location_dropdown_to_kml(location) {
                         houses = JSON.parse(houses);
                     }
                     const housing_selector = '<select name="Housing" class="housing"></select>';
-                    const get_price_selector = '<input name="House Price" type="button" value="Get Price" onclick="get_house_price()">';
+                    const get_price_selector = '<input class="leftrightmargin" name="House Price" type="button" value="Get Price" onclick="get_house_price()">';
                     const loan_period_selector = 'Loan Period: <input type="text" class="loan_period" readonly style="border:0; color:#f6931f; font-weight:bold;">\n' +
                         '<div class="slider-range-loan_period"></div>';
                     info_window = new google.maps.InfoWindow({
-                        content: "<b>" + location + "</b><br>" + "Houses Available:<br>" + organise_marker_text(houses) + "<br>" + housing_selector + get_price_selector + loan_period_selector
+                        content: "<h4>" + location + "</h4>" + housing_selector + get_price_selector + loan_period_selector
                     });
                 }
             });
@@ -205,11 +205,11 @@ function openIW(layerEvt) {
                             houses = JSON.parse(houses);
                         }
                         const housing_selector = '<select name="Housing" class="housing"></select>';
-                        const get_price_selector = '<input name="House Price" type="button" value="Get Price" onclick="get_house_price()">';
+                        const get_price_selector = '<input class="leftrightmargin" name="House Price" type="button" value="Get Price" onclick="get_house_price()">';
                         const loan_period_selector = 'Loan Period: <input type="text" class="loan_period" readonly style="border:0; color:#f6931f; font-weight:bold;">\n' +
                             '<div class="slider-range-loan_period"></div>';
                         info_window = new google.maps.InfoWindow({
-                            content: "<b>" + Object.keys(kml_to_locations[content])[idx] + "</b><br>" + "Houses Available:<br>" + organise_marker_text(houses) + "<br>" + housing_selector + get_price_selector + loan_period_selector
+                            content: "<h4>" + Object.keys(kml_to_locations[content])[idx] + "</h4>" + housing_selector + get_price_selector + loan_period_selector
                         });
                     }});
 

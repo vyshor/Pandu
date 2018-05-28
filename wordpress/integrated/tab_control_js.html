@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function tab_control(tab_id) {
+    function tab_control(tab_id, slide_id) {
         var i, tabnum;
 
         tabnum = document.getElementsByClassName("vc_tta-panel");
@@ -8,5 +8,6 @@
         }
 
         document.getElementById(tab_id).className += " vc_active";
+        document.getElementById(slide_id).className += " vc_active";
     }
 </script>

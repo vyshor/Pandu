@@ -140,7 +140,7 @@
         to_append.find("input[name='save']").remove();
 
         // Close save button
-        const remove_button = "<div style=\"position: relative\"><img class='remove_table' src=\"http://wecision.com/enterprise/images/icons/closeIcon.png\" style=\"position: absolute; top: 4px; right: 5px\"/></div>";
+        const remove_button = "<div class='remove_table' style=\"position: relative\"><a style=\"position: absolute; top: 4px; right: 5px; font-size:30px\">&times;</a></div>";
         to_append.prepend(jQuery(remove_button));
         //
         to_append.appendTo("#comparison_table_uni");
@@ -168,7 +168,7 @@
         to_add_stuff.prependTo(to_append);
 
         // Close save button
-        const remove_button = "<div style=\"position: relative\"><img class='remove_table' src=\"http://wecision.com/enterprise/images/icons/closeIcon.png\" style=\"position: absolute; top: 4px; right: 5px\"/></div>";
+        const remove_button = "<div class='remove_table' style=\"position: relative\"><a style=\"position: absolute; top: 4px; right: 5px; font-size:30px\">&times;</a></div>";
         to_append.prepend(jQuery(remove_button));
 
         to_append.appendTo("#comparison_table_house");

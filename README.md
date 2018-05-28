@@ -28,6 +28,7 @@ Access [this website](http://)  to demo it
         Folder - room_types | JSON files as database for dropdown menu, inputs house_type, outputs location
         Folder - uni | Python Scripts that scrape the university living cost and the database for those information
         get_housetype.py | Gets all the house_type in the API and combine into list, for faster loading, rather than multiple calls
+    Folder - wordpress | All the backend code + split into various html files for wordpress deployment
     Folder - useless files | Useless, but kept as a record of what is done before and failed
     Folder - node_modules | Not sure, what are really useful, but just there to ensure it works
     index.html | Empty yet, might serve no purpose
