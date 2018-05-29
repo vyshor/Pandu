@@ -1,4 +1,4 @@
-var investing_chart;
+var investing_chart, investing_chart_accumulated;
 var pie_chart = [null, null];
 var accumulated_data = [];
 google.charts.load('current', {packages: ['corechart', 'line']});
@@ -146,8 +146,13 @@ function graph_returns() {
     xhr.send(data);
 }
 
+function switch_graph() {
+    jQuery('#chart_div').toggleClass('invisible');
+    jQuery('#chart_div_accumulated').toggleClass('invisible');
+}
 
 function drawCurveTypes(data_points, high_low) {
+    const annual_invest = document.getElementById('annual_invest').value;
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'X');
     data.addColumn('number', 'Higher Risk');
@@ -189,9 +194,45 @@ function drawCurveTypes(data_points, high_low) {
         investing_chart.clearChart();
     }
 
-    chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
     chart.draw(data, options);
     investing_chart = chart;
+
+    var data_accumulated = new google.visualization.DataTable();
+    data_accumulated.addColumn('number', 'X');
+    data_accumulated.addColumn('number', 'Higher Risk');
+    data_accumulated.addColumn('number', 'Lower Risk');
+
+    var accumulation_accumulated_data = accumulated_data.slice(0);
+    for (var idx =0; idx < accumulation_accumulated_data.length; idx++) {
+            accumulation_accumulated_data[idx] = accumulation_accumulated_data[idx].slice(0);
+        for (var idx2 = 1; idx2 < accumulation_accumulated_data[idx].length; idx2++) {
+            accumulation_accumulated_data[idx][idx2] = accumulation_accumulated_data[idx][idx2] + annual_invest*idx;
+        }
+    }
+    data_accumulated.addRows(accumulation_accumulated_data);
+    const options_accumulated = {
+        hAxis: {
+            title: 'Time (Years)'
+        },
+        vAxis: {
+            title: 'Accumulated Amount ($)'
+        },
+        series: {
+            1: {curveType: 'function'}
+        }
+    };
+
+    if (investing_chart_accumulated != null)  {
+        investing_chart_accumulated.clearChart();
+    }
+
+    var chart_accumulated = new google.visualization.LineChart(document.getElementById('chart_div_accumulated'));
+    chart_accumulated.draw(data_accumulated, options_accumulated);
+    investing_chart_accumulated = chart_accumulated;
+
+    console.log(accumulated_data);
+    console.log(accumulation_accumulated_data);
 }
 
 
