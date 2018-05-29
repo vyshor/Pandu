@@ -6,6 +6,7 @@ google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(function () {
     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
+    graph_returns();
 });
 
 jQuery( function() {
@@ -16,7 +17,7 @@ jQuery( function() {
         step: 1,
         values: [ 4, 6 ],
         slide: function( event, ui ) {
-            // graph_returns();
+            graph_returns();
             get_breakdown_portfolio(ui.values[1], 0);
             get_breakdown_portfolio(ui.values[0], 1);
         }
@@ -105,21 +106,20 @@ function prep_accumulation_api_input(portfolio){
 
 function get_graph_data(portfolio, high_low) {
     var data = prep_accumulation_api_input(portfolio);
-    console.log(data);
     var xhr = new XMLHttpRequest();
     // xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === this.DONE) {
             var graph_data = JSON.parse(this.responseText);
-            console.log(graph_data);
+            graph_data = graph_data['response'];
             graph_data = graph_data["graphArray"];
-            console.log(graph_data);
             drawCurveTypes(graph_data, high_low);
         }
     });
 
-    xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators");
+    xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators", true);
+    xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(data);
 }
 
@@ -152,8 +152,6 @@ function drawCurveTypes(data_points, high_low) {
     data.addColumn('number', 'X');
     data.addColumn('number', 'Higher Risk');
     data.addColumn('number', 'Lower Risk');
-    console.log(data_points);
-    console.log(accumulated_data);
     if (data_points.length > accumulated_data.length) {
         for (var idx =0; idx < data_points.length; idx++) {
             if (idx < accumulated_data.length) {
@@ -197,29 +195,35 @@ function drawCurveTypes(data_points, high_low) {
 }
 
 
-function testing() {
-    var data = JSON.stringify({
-        "yearsToGoal": "10",
-        "compound": "12",
-        "confidence": "0.95",
-        "discreteExpectedVolatility": "0.1103",
-        "discreteExpectedReturnPerAnnum": "0.0514",
-        "initialInvestment": "1000",
-        "annualInvestment": "1000",
-        "currentYear": "2018",
-        "period": "beg"
-    });
-
-    var xhr = new XMLHttpRequest();
-    // xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === this.DONE) {
-            console.log(this.responseText);
-        }
-    });
-
-    xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators");
-
-    xhr.send(data);
-}
+// function testing() {
+//     var data = JSON.stringify({
+//         "yearsToGoal": "10",
+//         "compound": "12",
+//         "confidence": "0.95",
+//         "discreteExpectedVolatility": "0.1103",
+//         "discreteExpectedReturnPerAnnum": "0.0514",
+//         "initialInvestment": "1000",
+//         "annualInvestment": "1000",
+//         "currentYear": "2018"
+//     });
+//
+//     // data = '{yearstoGoal: "10", compound: "12", confidence,: "0.95", discreteExpectedVolatility: "0.1103", discreteExpectedReturnPerAnnum: "0.0514", initialInvestment: "1000", annualInvestment: "1000", currentYear: "2018"}';
+//     console.log(data);
+//
+//     var xhr = new XMLHttpRequest();
+//     // xhr.withCredentials = true;
+//
+//
+//     xhr.addEventListener("readystatechange", function () {
+//         if (this.readyState === this.DONE) {
+//             console.log(this.responseText);
+//             console.log(JSON.parse(this.responseText));
+//         }
+//     });
+//
+//     xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators", true);
+//
+//     xhr.setRequestHeader("Content-type", "application/json");
+//
+//     xhr.send(data);
+// }

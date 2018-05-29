@@ -29,6 +29,13 @@
             .invisible {
                 visibility: hidden;
             }
+            .portfolio_wrapper {
+                float: left;
+                width: 10%;
+                height: auto;
+                font-size: 9px;
+
+            }
         </style>
         <title>Title</title>
     </head>
@@ -46,12 +53,24 @@
                     Risk:
                     <div id="slider-range-risk"></div>
                 </div>
+                <div id="portfolio_names">
+                    <div class="portfolio_wrapper">Full Fixed Income</div>
+                    <div class="portfolio_wrapper">Very Conservative</div>
+                    <div class="portfolio_wrapper">Conservative</div>
+                    <div class="portfolio_wrapper">Conservative Plus</div>
+                    <div class="portfolio_wrapper">Balanced</div>
+                    <div class="portfolio_wrapper">Growth</div>
+                    <div class="portfolio_wrapper">Growth Plus</div>
+                    <div class="portfolio_wrapper">Aggressive</div>
+                    <div class="portfolio_wrapper">Aggressive Plus</div>
+                    <div class="portfolio_wrapper">Full Equity</div>
+                </div>
 
                 <div id="period_wrapper">
                     Period: <input type="text" id="period" readonly style="border:0; color:#f6931f; font-weight:bold;">
                     <div id="slider-range-period"></div>
                 </div>
-                <input name="Graph" type="button" value="Graph" onclick="testing()">
+                <!--<input name="Graph" type="button" value="Graph" onclick="testing()">-->
             </div>
             <div id="portfolio_details">
                 <div id="breakdown_portfolio_wrapper0" class="invisible">
