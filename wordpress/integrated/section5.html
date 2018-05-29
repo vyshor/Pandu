@@ -1,6 +1,19 @@
-<div style="text-align: center;">
-    <h6>Step 5 - Confirm your final decision</h6>
-    <p>Hopefully all the tips we have provide have helped you in making your decision.</p>
-    <a class="btn-red" onclick="tab_control('step4')">Previous</a>
-    <a class="btn-green" onclick="tab_control('step6');part_control('part2');">Next</a>
-</div>
+<p style="text-align: right;">
+    <button class="btn-red" onclick="tab_control('step4', 'slide1', 'Ponder upon your options', '50%')">Previous
+    </button>&nbsp;&nbsp;&nbsp;<button class="btn-green"
+                                       onclick="(async function () {
+                                           if (pressed_alr_compare_table)
+                                                return;
+                                            else {
+                                            pressed_alr_compare_table = true;
+                                            }
+                                            while (!jQuery('#comparison_table_house').has('div').length) { // if there is no house saved, force at least one save
+                                                save_table_house();
+                                                await sleep(1000);
+                                            }
+                                           tab_control('step6', 'slide3', 'Confirm your final decision', '75%');
+                                           compare_everything();
+                                           })();">
+    Next
+</button>
+</p>

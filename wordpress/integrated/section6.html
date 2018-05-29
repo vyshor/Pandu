@@ -1,1 +1,9 @@
-<p style="text-align: right;"><button class="btn-red" onclick="tab_control('step5', 'slide2')">Previous</button>&nbsp;&nbsp;&nbsp;<button class="btn-green" onclick="tab_control('step7', 'slide4')">Next</button></p>
+<p style="text-align: right;">
+    <button class="btn-green"
+            onclick="(function() {
+                tab_control('step7', 'slide4', 'Select Investment Portfolio', '87.5%');
+                graph_comparison();
+            })()">
+        Next
+    </button>
+</p>

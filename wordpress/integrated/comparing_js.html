@@ -1,306 +1,367 @@
-<script type="text/javascript">
-    if (!Array.prototype.last){
-        Array.prototype.last = function(last=1){
-            return this[this.length - last];
-        };
-    };
-
-    function compare_everything() {
-        // For uni
-        var to_append = jQuery("#comparison_table_uni").clone();
-        to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_uni", true).toggleClass("comparing_now", true);;
-        to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
-        to_append.appendTo('#comparing_table_uni');
-
-        // For house
-        to_append = jQuery("#comparison_table_house").clone();
-        to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_house", true).toggleClass("comparing_now", true);
-        to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
-        to_append.appendTo('#comparing_table_house');
-
-        // Remove all columns in sidebar
-        jQuery('.comparison_column').remove();
-
-        // Click selection to pick what they wanna graph
-        jQuery('.comparing_now_uni').click(function() {
-            jQuery('.comparing_now_uni_selected').toggleClass('comparing_now_uni_selected');
-            jQuery(this).toggleClass('comparing_now_uni_selected');
-        });
-
-        jQuery('.comparing_now_house').click(function() {
-            jQuery('.comparing_now_house_selected').toggleClass('comparing_now_house_selected');
-            jQuery(this).toggleClass('comparing_now_house_selected');
-        });
-
-        // Cancel away the selection
-        jQuery('.remove_comparing_table').click(function () {
-            jQuery(this).closest('.comparing_now').remove();
-        })
-
-    }
-
-    function graph_comparison() {
-        // First get all the information we need first
-        const uni_info = jQuery('.comparing_now_uni_selected');
-
-        const median_salary = parseInt(uni_info.children('#median_salary_wrapper').html().split('S$').last().replace(/,/g, ""));
-        var estimated_expense = 0;
-        var liabilities = 0;
-        var payback_period = 0;
-        const house_info = jQuery('.comparing_now_house_selected');
-        // Need wait him to update the CSS to determine how to parse it
-        const down_payment = parseInt(house_info.children('#down_payment_wrapper').children('#down_payment').html().replace(/,/g, ""));
-
-        // To get estimated_expense
-        var data = JSON.stringify(false);
-        var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === this.DONE) {
-                const expense = parseInt(JSON.parse(this.responseText));
-                const estimated_investment = Math.ceil((median_salary - expense)*12/1000)*1000;
-                const min_investment = 0;
-                const max_investment = median_salary*12;
-                const downpayment_target = down_payment;
-                let liabilities = 0;
-                let liabilities_periods = 0;
-                if (!uni_info.children('#monthly_repayment_wrapper').hasClass('invisible')) {
-                    liabilities = parseInt(uni_info.children('#monthly_repayment_wrapper').html().split('S$').last().replace(/,/g, ""));
-                    liabilities_periods = parseInt(uni_info.children('#payback_period_wrapper').html().split(' ').last(2));
-                    // Everything need to change to annual values and round off to thousands for ease
-                }
-                preset_sliders(min_investment, max_investment, downpayment_target, estimated_investment, liabilities, liabilities_periods);
-            }
-        });
-        xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + median_salary);
-        xhr.send(data);
-
-        // End of request
-
-        // I think we got all the information le, our downpayment is the target
-        // Our control variables given beforehand are the risk portfolios
-        // The control variables that we need is max and minimum value of possible investment which is when expense = 0, minimum when expense = possible_investment
-        // Then we vary the time taken to reach the first downpayment
-    }
-
-
-    function preset_sliders(min_investment, max_investment, downpayment_target, estimated_investment, liabilities, liabilities_periods) {
-        liabilities_period = liabilities_periods;
-        downpayment_amount = downpayment_target;
-        monthly_liabilities = liabilities;
-        jQuery( function() {
-            jQuery( "#slider-range-risk" ).slider({
-                range: true,
-                min: 1,
-                max: 10,
-                step: 1,
-                values: [ 4, 8 ],
-                slide: function( event, ui ) {
-                    graph_returns();
-                    get_breakdown_portfolio(ui.values[1], 0);
-                    get_breakdown_portfolio(ui.values[0], 1);
-                }
-            });
-
-            jQuery( "#slider-range-period" ).slider({
-                range: false,
-                min: 1,
-                max: 50,
-                value: 25,
-                step: 1,
-                slide: function( event, ui ) {
-                    jQuery("#period").val(ui.value + " years");
-                    graph_returns();
-                }
-            });
-            jQuery("#period").val(jQuery("#slider-range-period").slider("value") + " years");
-
-            jQuery( "#slider-range-invest" ).slider({
-                range: false,
-                min: 1000,
-                max: max_investment*2,
-                value: estimated_investment*3/2,
-                step: 1000,
-                slide: function( event, ui ) {
-                    jQuery("#annual_invest").val(ui.value);
-                    graph_returns();
-                }
-            });
-            jQuery("#annual_invest").val(jQuery("#slider-range-invest").slider("value"));
-        } );
-
-        google.charts.setOnLoadCallback(function () {
-            get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
-            get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
-            graph_returns();
-        });
-
-    }
-
-    // I think below this portion can be ported directly form investing_portfolio when investing_portfolio is working
-    // Till they fix their api
-    var accumulated_data = []; // plotting points
-    var pie_chart = [null, null];
-    var investing_chart;
-    var downpayment_amount;
-    var monthly_liabilities, liabilities_period;
-    // google.charts.setOnLoadCallback(function () {
-    //     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
-    //     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
-    //     graph_returns();
-    // });
-
-
-    function get_breakdown_portfolio(portfolio_idx, high_low){
-        var data = JSON.stringify(false);
-        var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === this.DONE) {
-                const pie_points = JSON.parse(this.responseText);
-                var data_grp = [["Product Name", "Percentage"]];
-                for (var idx=0; idx < pie_points.length; idx++){
-                    data_grp.push([pie_points[idx]["ProductName"], pie_points[idx]["ProductBreakdown"]]);
-                }
-                update_pie_chart(data_grp, high_low);
-            }
-        });
-        xhr.open("GET", "http://dev.bambu.life:8081/api/ModelPortfolioProductBreakdown/" + portfolio_idx);
-        xhr.send(data);
-    }
-
-    function update_pie_chart(data_grp, high_low) {
-        var data = google.visualization.arrayToDataTable(data_grp);
-        var chart_title;
-        if (high_low) { // if low risk
-            chart_title = "For Less Risk";
-        } else {
-            chart_title = "For More Risk";
-        }
-        var options = {
-            title: 'Product Breakdown ' + chart_title
+    <script type="text/javascript">
+        if (!Array.prototype.last){
+            Array.prototype.last = function(last=1){
+                return this[this.length - last];
+            };
         };
 
-        if (pie_chart[high_low] != null)  {
-            pie_chart[high_low].clearChart();
-        }
+        function compare_everything() {
+            // For uni
+            var to_append = jQuery("#comparison_table_uni").clone();
+            to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_uni", true).toggleClass("comparing_now", true);
+            to_append.children(':first-child').toggleClass('comparing_now_uni_selected');
+            to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
+            to_append.appendTo('#comparing_table_uni');
 
-        chart = new google.visualization.PieChart(document.getElementById('breakdown_portfolio' + high_low));
-        chart.draw(data, options);
-        jQuery("#breakdown_portfolio_wrapper" + high_low).toggleClass("invisible", false);
-        pie_chart[high_low] = chart;
-    }
+            // For house
+            to_append = jQuery("#comparison_table_house").clone();
+            to_append.children().toggleClass("comparison_column", false).toggleClass("comparing_now_house", true).toggleClass("comparing_now", true);
+            to_append.children(':first-child').toggleClass('comparing_now_house_selected');
+            to_append.find(".remove_table").toggleClass("remove_table", false).toggleClass("remove_comparing_table", true);
+            to_append.appendTo('#comparing_table_house');
 
-    function get_graph_data(portfolio, high_low) {
-        var data = prep_accumulation_api_input(portfolio);
-        var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
+            // Remove all columns in sidebar
+            jQuery('.comparison_column').remove();
 
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === this.DONE) {
-                var graph_data = JSON.parse(this.responseText);
-                graph_data = graph_data['response'];
-                graph_data = graph_data["graphArray"];
-                drawCurveTypes(graph_data, high_low);
-            }
-        });
+            // Click selection to pick what they wanna graph
+            jQuery('.comparing_now_uni').click(function() {
+                jQuery('.comparing_now_uni_selected').toggleClass('comparing_now_uni_selected');
+                jQuery(this).toggleClass('comparing_now_uni_selected');
+            });
 
-        xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators", true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(data);
-    }
+            jQuery('.comparing_now_house').click(function() {
+                jQuery('.comparing_now_house_selected').toggleClass('comparing_now_house_selected');
+                jQuery(this).toggleClass('comparing_now_house_selected');
+            });
 
-    function graph_returns() {
-        var data = JSON.stringify(false);
-
-        var xhr = new XMLHttpRequest();
-        // xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === this.DONE) {
-                var portfolios = JSON.parse(this.responseText);
-                var lower_port = jQuery('#slider-range-risk').slider("values", 0);
-                var upper_port = jQuery('#slider-range-risk').slider("values", 1);
-                lower_port = portfolios[lower_port - 1];
-                upper_port = portfolios[upper_port - 1];
-
-                get_graph_data(lower_port, 1);
-                get_graph_data(upper_port, 0);
-            }
-        });
-
-        xhr.open("GET", "http://dev.bambu.life:8081/api/ModelPortfolioList");
-        xhr.send(data);
-    }
-
-    function drawCurveTypes(data_points, high_low) {
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'X');
-        data.addColumn('number', 'Higher Risk');
-        data.addColumn('number', 'Lower Risk');
-        data.addColumn('number', 'Downpayment');
-        const annual_invest = document.getElementById('annual_invest').value;
-        // console.log(data_points);
-        // console.log(accumulated_data);
-        if (data_points.length > accumulated_data.length) {
-            for (var idx =0; idx < data_points.length; idx++) {
-                if (idx < accumulated_data.length) {
-                    accumulated_data[idx][high_low+1] = data_points[idx] + annual_invest;
+            // Cancel away the selection
+            jQuery('.remove_comparing_table').click(function () {
+                if (jQuery(this).closest('.comparing_now').hasClass("comparing_now_uni")) {
+                    if (jQuery('#comparison_table_uni').children().length > 1) {
+                        if (jQuery(this).closest('.comparing_now').hasClass('comparing_now_uni_selected')) {
+                            jQuery(this).closest('.comparing_now').remove();
+                            jQuery('#comparison_table_uni').children(':first-child').toggleClass('comparing_now_uni_selected', true);
+                        } else {
+                            jQuery(this).closest('.comparing_now').remove();
+                        }
+                    }
                 } else {
-                    accumulated_data.push([idx, 0, 0]);
-                    accumulated_data[idx][high_low+1] = data_points[idx] + annual_invest;
+                    if (jQuery('#comparison_table_house').children().length > 1) {
+                        if (jQuery(this).closest('.comparing_now').hasClass('comparing_now_house_selected')) {
+                            jQuery(this).closest('.comparing_now').remove();
+                            jQuery('#comparison_table_house').children(':first-child').toggleClass('comparing_now_house_selected', true);
+                        } else {
+                            jQuery(this).closest('.comparing_now').remove();
+                        }
+                    }
                 }
-            }
-        } else {
-            for (var idx =0; idx < accumulated_data.length; idx++) {
-                if (idx < data_points.length) {
-                    accumulated_data[idx][high_low+1] = data_points[idx] + annual_invest;
-                } else {
-                    accumulated_data.pop();
+            });
+
+        }
+
+        function graph_comparison() {
+            // First get all the information we need first
+            var uni_info = jQuery('.comparing_now_uni_selected');
+
+            const median_salary = parseInt(uni_info.children('#median_salary_wrapper').html().split('S$').last().replace(/,/g, ""));
+            var estimated_expense = 0;
+            var liabilities = 0;
+            var payback_period = 0;
+            var house_info = jQuery('.comparing_now_house_selected');
+
+            uni_info.children('.remove_comparing_table').remove();
+            house_info.children('.remove_comparing_table').remove();
+            jQuery('#graphing_column').append(uni_info.toggleClass('comparing_now_uni_selected', false).toggleClass('comparison_column', true).toggleClass('comparing_now_uni', false).toggleClass('comparing_now', false))
+                .append(house_info.toggleClass('comparing_now_house_selected', false).toggleClass('comparison_column', true).toggleClass('comparing_now_house', false).toggleClass('comparing_now', false));
+            uni_info.off('click');
+            house_info.off('click');
+
+            // Need wait him to update the CSS to determine how to parse it
+            const down_payment = parseInt(house_info.children('#down_payment_wrapper').children('#down_payment').html().replace(/,/g, ""));
+
+            // To get estimated_expense
+            var data = JSON.stringify(false);
+            var xhr = new XMLHttpRequest();
+            // xhr.withCredentials = true;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === this.DONE) {
+                    const expense = parseInt(JSON.parse(this.responseText));
+                    const estimated_investment = Math.ceil((median_salary - expense)*12/1000)*1000;
+                    const min_investment = 0;
+                    const max_investment = median_salary*12;
+                    const downpayment_target = down_payment;
+                    let liabilities = 0;
+                    let liabilities_periods = 0;
+                    if (!uni_info.children('#monthly_repayment_wrapper').hasClass('invisible')) {
+                        liabilities = parseInt(uni_info.children('#monthly_repayment_wrapper').html().split('S$').last().replace(/,/g, ""));
+                        liabilities_periods = parseInt(uni_info.children('#payback_period_wrapper').html().split(' ').last(2));
+                        // Everything need to change to annual values and round off to thousands for ease
+                    }
+                    preset_sliders(min_investment, max_investment, downpayment_target, estimated_investment, liabilities, liabilities_periods);
                 }
+            });
+            xhr.open("GET", "http://dev.bambu.life:8081/api/TotalExpenseEstimator?monthly_income=" + median_salary);
+            xhr.send(data);
+
+            // End of request
+
+            // I think we got all the information le, our downpayment is the target
+            // Our control variables given beforehand are the risk portfolios
+            // The control variables that we need is max and minimum value of possible investment which is when expense = 0, minimum when expense = possible_investment
+            // Then we vary the time taken to reach the first downpayment
+        }
+
+
+        function preset_sliders(min_investment, max_investment, downpayment_target, estimated_investment, liabilities, liabilities_periods) {
+            liabilities_period = liabilities_periods;
+            downpayment_amount = downpayment_target;
+            monthly_liabilities = liabilities;
+            jQuery( function() {
+                jQuery( "#slider-range-risk" ).slider({
+                    range: true,
+                    min: 1,
+                    max: 10,
+                    step: 1,
+                    values: [ 4, 8 ],
+                    slide: function( event, ui ) {
+                        graph_returns();
+                        get_breakdown_portfolio(ui.values[1], 0);
+                        get_breakdown_portfolio(ui.values[0], 1);
+                    }
+                });
+
+                jQuery( "#slider-range-period" ).slider({
+                    range: false,
+                    min: 1,
+                    max: 50,
+                    value: 25,
+                    step: 1,
+                    slide: function( event, ui ) {
+                        jQuery("#period").val(ui.value + " years");
+                        graph_returns();
+                    }
+                });
+                jQuery("#period").val(jQuery("#slider-range-period").slider("value") + " years");
+
+                jQuery( "#slider-range-invest" ).slider({
+                    range: false,
+                    min: 1000,
+                    max: max_investment*2,
+                    value: estimated_investment*3/2,
+                    step: 1000,
+                    slide: function( event, ui ) {
+                        jQuery("#annual_invest").val(ui.value);
+                        graph_returns();
+                    }
+                });
+                jQuery("#annual_invest").val(jQuery("#slider-range-invest").slider("value"));
+            } );
+
+            google.charts.setOnLoadCallback(function () {
+                get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
+                get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
+                graph_returns();
+            });
+
+        }
+
+        // I think below this portion can be ported directly form investing_portfolio when investing_portfolio is working
+        // Till they fix their api
+        var accumulated_data = []; // plotting points
+        var pie_chart = [null, null];
+        var investing_chart, investing_chart_accumulated;
+        var downpayment_amount;
+        var monthly_liabilities, liabilities_period;
+        // google.charts.setOnLoadCallback(function () {
+        //     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 1 ), 0);
+        //     get_breakdown_portfolio(jQuery("#slider-range-risk").slider( "values", 0 ), 1);
+        //     graph_returns();
+        // });
+
+
+        function get_breakdown_portfolio(portfolio_idx, high_low){
+            var data = JSON.stringify(false);
+            var xhr = new XMLHttpRequest();
+            // xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === this.DONE) {
+                    const pie_points = JSON.parse(this.responseText);
+                    var data_grp = [["Product Name", "Percentage"]];
+                    for (var idx=0; idx < pie_points.length; idx++){
+                        data_grp.push([pie_points[idx]["ProductName"], pie_points[idx]["ProductBreakdown"]]);
+                    }
+                    update_pie_chart(data_grp, high_low);
+                }
+            });
+            xhr.open("GET", "http://dev.bambu.life:8081/api/ModelPortfolioProductBreakdown/" + portfolio_idx);
+            xhr.send(data);
+        }
+
+        function update_pie_chart(data_grp, high_low) {
+            var data = google.visualization.arrayToDataTable(data_grp);
+            var chart_title;
+            if (high_low) { // if low risk
+                chart_title = "For Less Risk";
+            } else {
+                chart_title = "For More Risk";
+            }
+            var options = {
+                title: 'Product Breakdown ' + chart_title
+            };
+
+            if (pie_chart[high_low] != null)  {
+                pie_chart[high_low].clearChart();
             }
 
+            chart = new google.visualization.PieChart(document.getElementById('breakdown_portfolio' + high_low));
+            chart.draw(data, options);
+            jQuery("#breakdown_portfolio_wrapper" + high_low).toggleClass("invisible", false);
+            pie_chart[high_low] = chart;
         }
 
-        for (var idx =0; idx < accumulated_data.length; idx++) {
-            if (accumulated_data[idx].length < 4)
-            accumulated_data[idx].push(downpayment_amount);
-        }
-        data.addRows(accumulated_data);
+        function get_graph_data(portfolio, high_low) {
+            var data = prep_accumulation_api_input(portfolio);
+            var xhr = new XMLHttpRequest();
+            // xhr.withCredentials = true;
 
-        var options = {
-            hAxis: {
-                title: 'Time (Years)'
-            },
-            vAxis: {
-                title: 'Accumulated Amount ($)'
-            },
-            series: {
-                1: {curveType: 'function'}
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === this.DONE) {
+                    var graph_data = JSON.parse(this.responseText);
+                    graph_data = graph_data['response'];
+                    graph_data = graph_data["graphArray"];
+                    drawCurveTypes(graph_data, high_low);
+                }
+            });
+
+            xhr.open("POST", "http://microservice.dev.bambu.life/api/graph/accumulators", true);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(data);
+        }
+
+        function graph_returns() {
+            var data = JSON.stringify(false);
+
+            var xhr = new XMLHttpRequest();
+            // xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === this.DONE) {
+                    var portfolios = JSON.parse(this.responseText);
+                    var lower_port = jQuery('#slider-range-risk').slider("values", 0);
+                    var upper_port = jQuery('#slider-range-risk').slider("values", 1);
+                    lower_port = portfolios[lower_port - 1];
+                    upper_port = portfolios[upper_port - 1];
+
+                    get_graph_data(lower_port, 1);
+                    get_graph_data(upper_port, 0);
+                }
+            });
+
+            xhr.open("GET", "http://dev.bambu.life:8081/api/ModelPortfolioList");
+            xhr.send(data);
+        }
+
+        function switch_graph() {
+            jQuery('#chart_div').toggleClass('invisible');
+            jQuery('#chart_div_accumulated').toggleClass('invisible');
+        }
+
+        function drawCurveTypes(data_points, high_low) {
+            const annual_invest = document.getElementById('annual_invest').value;
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Higher Risk');
+            data.addColumn('number', 'Lower Risk');
+            if (data_points.length > accumulated_data.length) {
+                for (var idx =0; idx < data_points.length; idx++) {
+                    if (idx < accumulated_data.length) {
+                        accumulated_data[idx][high_low+1] = data_points[idx];
+                    } else {
+                        accumulated_data.push([idx, 0, 0]);
+                        accumulated_data[idx][high_low+1] = data_points[idx];
+                    }
+                }
+            } else {
+                for (var idx =0; idx < accumulated_data.length; idx++) {
+                    if (idx < data_points.length) {
+                        accumulated_data[idx][high_low+1] = data_points[idx];
+                    } else {
+                        accumulated_data.pop();
+                    }
+                }
+
             }
-        };
+            data.addRows(accumulated_data);
 
-        if (investing_chart != null)  {
-            investing_chart.clearChart();
+            var options = {
+                hAxis: {
+                    title: 'Time (Years)'
+                },
+                vAxis: {
+                    title: 'Expected Returns ($)'
+                },
+                series: {
+                    1: {curveType: 'function'}
+                }
+            };
+
+            if (investing_chart != null)  {
+                investing_chart.clearChart();
+            }
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+            investing_chart = chart;
+
+            var data_accumulated = new google.visualization.DataTable();
+            data_accumulated.addColumn('number', 'X');
+            data_accumulated.addColumn('number', 'Higher Risk');
+            data_accumulated.addColumn('number', 'Lower Risk');
+            data_accumulated.addColumn('number', 'Downpayment');
+
+            var accumulation_accumulated_data = accumulated_data.slice(0);
+            for (var idx =0; idx < accumulation_accumulated_data.length; idx++) {
+                accumulation_accumulated_data[idx] = accumulation_accumulated_data[idx].slice(0);
+                for (var idx2 = 1; idx2 < accumulation_accumulated_data[idx].length; idx2++) {
+                    accumulation_accumulated_data[idx][idx2] = accumulation_accumulated_data[idx][idx2] + annual_invest*idx;
+                }
+                accumulation_accumulated_data[idx].push(downpayment_amount);
+            }
+            data_accumulated.addRows(accumulation_accumulated_data);
+            const options_accumulated = {
+                hAxis: {
+                    title: 'Time (Years)'
+                },
+                vAxis: {
+                    title: 'Accumulated Amount ($)'
+                },
+                series: {
+                    1: {curveType: 'function'}
+                }
+            };
+
+            if (investing_chart_accumulated != null)  {
+                investing_chart_accumulated.clearChart();
+            }
+
+            var chart_accumulated = new google.visualization.LineChart(document.getElementById('chart_div_accumulated'));
+            chart_accumulated.draw(data_accumulated, options_accumulated);
+            investing_chart_accumulated = chart_accumulated;
+
         }
 
-        chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-        investing_chart = chart;
-    }
+        function prep_accumulation_api_input(portfolio){
+            return JSON.stringify({
+                "yearsToGoal": ""+ jQuery('#slider-range-period').slider("value"),
+                "compound": "12",
+                "confidence": "0.95",
+                "discreteExpectedVolatility": "" + portfolio['Volatility'],
+                "discreteExpectedReturnPerAnnum": "" + portfolio['ExpectedReturn'],
+                "initialInvestment": "0",
+                "annualInvestment": "" + document.getElementById('annual_invest').value,
+                "currentYear": "2018"
+            });
+        }
 
-    function prep_accumulation_api_input(portfolio){
-        return JSON.stringify({
-            "yearsToGoal": ""+ jQuery('#slider-range-period').slider("value"),
-            "compound": "12",
-            "confidence": "0.95",
-            "discreteExpectedVolatility": "" + portfolio['Volatility'],
-            "discreteExpectedReturnPerAnnum": "" + portfolio['ExpectedReturn'],
-            "initialInvestment": "0",
-            "annualInvestment": "" + document.getElementById('annual_invest').value,
-            "currentYear": "2018"
-        });
-    }
-
-</script>
+    </script>

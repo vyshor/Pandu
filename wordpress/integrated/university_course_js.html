@@ -147,7 +147,8 @@
 
         // Set the remove button function
         jQuery('.remove_table').click(function () {
-            jQuery(this).closest('.comparison_column').remove();
+            if (jQuery('#comparison_table_uni').children().length > 1)
+                jQuery(this).closest('.comparison_column').remove();
         })
     }
 
@@ -175,7 +176,8 @@
 
         // Set the remove button function
         jQuery('.remove_table').click(function () {
-            jQuery(this).closest('.comparison_column').remove();
+            if (jQuery('#comparison_table_house').children().length > 1)
+                jQuery(this).closest('.comparison_column').remove();
         })
 
     }
