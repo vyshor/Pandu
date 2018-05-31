@@ -1,4 +1,6 @@
-# University | House | Investing Calculator
+# Pandu
+### Winning Project of SMU Fintech Challenge 2018
+###### University | House | Investing Portfolio Calculator
 
 ### TL;DR
 

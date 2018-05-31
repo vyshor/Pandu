@@ -295,6 +295,9 @@
             data.addRows(accumulated_data);
 
             var options = {
+                'title':'Comparison of Different Portfolios',
+                    'width':'654px',
+                    'height':'441px',
                 hAxis: {
                     title: 'Time (Years)'
                 },
@@ -304,6 +307,7 @@
                 series: {
                     1: {curveType: 'function'}
                 }
+
             };
 
             if (investing_chart != null)  {
@@ -330,6 +334,9 @@
             }
             data_accumulated.addRows(accumulation_accumulated_data);
             const options_accumulated = {
+                'title':'Accumulated Amount of Different Portfolios',
+                'width':'654px',
+                'height':'441px',
                 hAxis: {
                     title: 'Time (Years)'
                 },
