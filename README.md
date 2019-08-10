@@ -2,9 +2,6 @@
 ### Winning Project of SMU Fintech x Bambu Challenge 2018
 ###### University | House | Investing Portfolio Calculator
 
-### TL;DR
-
-Access [this website](http://fintech.skydronesg.com/)  to demo it
 
 ### Filepaths of Each Calculator | Backend Side (without much CSS)
 
